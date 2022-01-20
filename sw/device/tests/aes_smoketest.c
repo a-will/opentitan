@@ -7,7 +7,6 @@
 #include "sw/device/lib/dif/dif_aes.h"
 #include "sw/device/lib/runtime/log.h"
 #include "sw/device/lib/testing/check.h"
-#include "sw/device/lib/testing/entropy_testutils.h"
 #include "sw/device/lib/testing/test_framework/ottf.h"
 
 #include "hw/top_earlgrey/sw/autogen/top_earlgrey.h"
@@ -65,9 +64,6 @@ bool test_main(void) {
   dif_aes_t aes;
 
   LOG_INFO("Running AES test");
-
-  // First of all, we need to get the entropy complex up and running.
-  entropy_testutils_boot_mode_init();
 
   // Initialise AES.
   CHECK_DIF_OK(

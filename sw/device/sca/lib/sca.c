@@ -7,8 +7,6 @@
 #include "sw/device/lib/arch/device.h"
 #include "sw/device/lib/base/bitfield.h"
 #include "sw/device/lib/dif/dif_clkmgr.h"
-#include "sw/device/lib/dif/dif_csrng.h"
-#include "sw/device/lib/dif/dif_edn.h"
 #include "sw/device/lib/dif/dif_entropy_src.h"
 #include "sw/device/lib/dif/dif_gpio.h"
 #include "sw/device/lib/dif/dif_rv_timer.h"
@@ -58,13 +56,9 @@ enum {
   kRvTimerHart = kTopEarlgreyPlicTargetIbex0,
 };
 
-static dif_uart_t uart0;
 static dif_uart_t uart1;
 static dif_gpio_t gpio;
 static dif_rv_timer_t timer;
-static dif_csrng_t csrng;
-static dif_edn_t edn0;
-static dif_edn_t edn1;
 
 // TODO(alphan): Handle return values as long as they don't affect capture rate.
 
@@ -80,13 +74,9 @@ static void sca_init_uart(void) {
   };
 
   IGNORE_RESULT(dif_uart_init(
-      mmio_region_from_addr(TOP_EARLGREY_UART0_BASE_ADDR), &uart0));
-  IGNORE_RESULT(dif_uart_configure(&uart0, uart_config));
-  base_uart_stdout(&uart0);
-
-  IGNORE_RESULT(dif_uart_init(
-      mmio_region_from_addr(TOP_EARLGREY_UART1_BASE_ADDR), &uart1));
+      mmio_region_from_addr(TOP_EARLGREY_UART0_BASE_ADDR), &uart1));
   IGNORE_RESULT(dif_uart_configure(&uart1, uart_config));
+  base_uart_stdout(&uart1);
 }
 
 /**
@@ -128,25 +118,6 @@ static void sca_init_timer(void) {
 }
 
 /**
- * Initializes the CSRNG handle.
- */
-static void sca_init_csrng(void) {
-  IGNORE_RESULT(dif_csrng_init(
-      mmio_region_from_addr(TOP_EARLGREY_CSRNG_BASE_ADDR), &csrng));
-}
-
-/**
- * Initializes the EDN handle.
- */
-static void sca_init_edn(void) {
-  IGNORE_RESULT(
-      dif_edn_init(mmio_region_from_addr(TOP_EARLGREY_EDN0_BASE_ADDR), &edn0));
-
-  IGNORE_RESULT(
-      dif_edn_init(mmio_region_from_addr(TOP_EARLGREY_EDN1_BASE_ADDR), &edn1));
-}
-
-/**
  * Override default Timer ISR.
  *
  * Disables the counter and clears pending interrupts.
@@ -172,20 +143,6 @@ void ottf_timer_isr(void) {
  * @param disable Set of peripherals to disable.
  */
 void sca_disable_peripherals(sca_peripherals_t disable) {
-  if (disable & kScaPeripheralEdn) {
-    IGNORE_RESULT(dif_edn_stop(&edn0));
-    IGNORE_RESULT(dif_edn_stop(&edn1));
-  }
-  if (disable & kScaPeripheralCsrng) {
-    IGNORE_RESULT(dif_csrng_stop(&csrng));
-  }
-  if (disable & kScaPeripheralEntropy) {
-    dif_entropy_src_t entropy;
-    IGNORE_RESULT(dif_entropy_src_init(
-        mmio_region_from_addr(TOP_EARLGREY_ENTROPY_SRC_BASE_ADDR), &entropy));
-    IGNORE_RESULT(dif_entropy_src_disable(&entropy));
-  }
-
   // Disable HMAC, KMAC, OTBN and USB clocks through CLKMGR DIF.
   dif_clkmgr_t clkmgr;
   IGNORE_RESULT(dif_clkmgr_init(
@@ -199,17 +156,6 @@ void sca_disable_peripherals(sca_peripherals_t disable) {
     IGNORE_RESULT(dif_clkmgr_hintable_clock_set_hint(
         &clkmgr, CLKMGR_CLK_HINTS_CLK_MAIN_HMAC_HINT_BIT, kDifToggleDisabled));
   }
-  if (disable & kScaPeripheralKmac) {
-    IGNORE_RESULT(dif_clkmgr_hintable_clock_set_hint(
-        &clkmgr, CLKMGR_CLK_HINTS_CLK_MAIN_KMAC_HINT_BIT, kDifToggleDisabled));
-  }
-  if (disable & kScaPeripheralOtbn) {
-    IGNORE_RESULT(dif_clkmgr_hintable_clock_set_hint(
-        &clkmgr, CLKMGR_CLK_HINTS_CLK_IO_DIV4_OTBN_HINT_BIT,
-        kDifToggleDisabled));
-    IGNORE_RESULT(dif_clkmgr_hintable_clock_set_hint(
-        &clkmgr, CLKMGR_CLK_HINTS_CLK_MAIN_OTBN_HINT_BIT, kDifToggleDisabled));
-  }
   if (disable & kScaPeripheralUsb) {
     IGNORE_RESULT(dif_clkmgr_gateable_clock_set_enabled(
         &clkmgr, CLKMGR_CLK_ENABLES_CLK_USB_PERI_EN_BIT, kDifToggleDisabled));
@@ -221,8 +167,6 @@ void sca_init(sca_trigger_source_t trigger, sca_peripherals_t enable) {
   sca_init_uart();
   sca_init_gpio(trigger);
   sca_init_timer();
-  sca_init_csrng();
-  sca_init_edn();
   sca_disable_peripherals(~enable);
 }
 

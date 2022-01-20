@@ -39,7 +39,7 @@
 /**
  * Memory size for flash_ctrl_eflash in top earlgrey.
  */
-#define TOP_EARLGREY_EFLASH_SIZE_BYTES 0x100000
+#define TOP_EARLGREY_EFLASH_SIZE_BYTES 0x10000
 
 /**
  * Memory base for sram_ctrl_main_ram_main in top earlgrey.
@@ -71,27 +71,6 @@
  */
 #define TOP_EARLGREY_UART0_BASE_ADDR 0x40000000
 /**
- * Peripheral base address for uart1 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_UART1_BASE_ADDR 0x40010000
-/**
- * Peripheral base address for uart2 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_UART2_BASE_ADDR 0x40020000
-/**
- * Peripheral base address for uart3 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_UART3_BASE_ADDR 0x40030000
-/**
  * Peripheral base address for gpio in top earlgrey.
  *
  * This should be used with #mmio_region_from_addr to access the memory-mapped
@@ -106,33 +85,12 @@
  */
 #define TOP_EARLGREY_SPI_DEVICE_BASE_ADDR 0x40050000
 /**
- * Peripheral base address for i2c0 in top earlgrey.
+ * Peripheral base address for spi_host0 in top earlgrey.
  *
  * This should be used with #mmio_region_from_addr to access the memory-mapped
  * registers associated with the peripheral (usually via a DIF).
  */
-#define TOP_EARLGREY_I2C0_BASE_ADDR 0x40080000
-/**
- * Peripheral base address for i2c1 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_I2C1_BASE_ADDR 0x40090000
-/**
- * Peripheral base address for i2c2 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_I2C2_BASE_ADDR 0x400A0000
-/**
- * Peripheral base address for pattgen in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_PATTGEN_BASE_ADDR 0x400E0000
+#define TOP_EARLGREY_SPI_HOST0_BASE_ADDR 0x40060000
 /**
  * Peripheral base address for rv_timer in top earlgrey.
  *
@@ -147,48 +105,6 @@
  * registers associated with the peripheral (usually via a DIF).
  */
 #define TOP_EARLGREY_USBDEV_BASE_ADDR 0x40110000
-/**
- * Peripheral base address for core device on otp_ctrl in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_OTP_CTRL_CORE_BASE_ADDR 0x40130000
-/**
- * Peripheral base address for prim device on otp_ctrl in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_OTP_CTRL_PRIM_BASE_ADDR 0x40132000
-/**
- * Peripheral base address for lc_ctrl in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_LC_CTRL_BASE_ADDR 0x40140000
-/**
- * Peripheral base address for alert_handler in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_ALERT_HANDLER_BASE_ADDR 0x40150000
-/**
- * Peripheral base address for spi_host0 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_SPI_HOST0_BASE_ADDR 0x40300000
-/**
- * Peripheral base address for spi_host1 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_SPI_HOST1_BASE_ADDR 0x40310000
 /**
  * Peripheral base address for pwrmgr_aon in top earlgrey.
  *
@@ -211,27 +127,6 @@
  */
 #define TOP_EARLGREY_CLKMGR_AON_BASE_ADDR 0x40420000
 /**
- * Peripheral base address for sysrst_ctrl_aon in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_SYSRST_CTRL_AON_BASE_ADDR 0x40430000
-/**
- * Peripheral base address for adc_ctrl_aon in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_ADC_CTRL_AON_BASE_ADDR 0x40440000
-/**
- * Peripheral base address for pwm_aon in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_PWM_AON_BASE_ADDR 0x40450000
-/**
  * Peripheral base address for pinmux_aon in top earlgrey.
  *
  * This should be used with #mmio_region_from_addr to access the memory-mapped
@@ -252,13 +147,6 @@
  * registers associated with the peripheral (usually via a DIF).
  */
 #define TOP_EARLGREY_AST_BASE_ADDR 0x40480000
-/**
- * Peripheral base address for sensor_ctrl in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_SENSOR_CTRL_BASE_ADDR 0x40490000
 /**
  * Peripheral base address for regs device on sram_ctrl_ret_aon in top earlgrey.
  *
@@ -329,55 +217,6 @@
  * registers associated with the peripheral (usually via a DIF).
  */
 #define TOP_EARLGREY_HMAC_BASE_ADDR 0x41110000
-/**
- * Peripheral base address for kmac in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_KMAC_BASE_ADDR 0x41120000
-/**
- * Peripheral base address for otbn in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_OTBN_BASE_ADDR 0x41130000
-/**
- * Peripheral base address for keymgr in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_KEYMGR_BASE_ADDR 0x41140000
-/**
- * Peripheral base address for csrng in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_CSRNG_BASE_ADDR 0x41150000
-/**
- * Peripheral base address for entropy_src in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_ENTROPY_SRC_BASE_ADDR 0x41160000
-/**
- * Peripheral base address for edn0 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_EDN0_BASE_ADDR 0x41170000
-/**
- * Peripheral base address for edn1 in top earlgrey.
- *
- * This should be used with #mmio_region_from_addr to access the memory-mapped
- * registers associated with the peripheral (usually via a DIF).
- */
-#define TOP_EARLGREY_EDN1_BASE_ADDR 0x41180000
 /**
  * Peripheral base address for regs device on sram_ctrl_main in top earlgrey.
  *

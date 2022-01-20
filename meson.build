@@ -209,7 +209,7 @@ gen_hw_hdr = generator(
 )
 
 # TODO: Considering moving these into hw/ip directories.
-TOPNAME='top_earlgrey'
+TOPNAME='top_englishbreakfast'
 hw_ip_adc_ctrl_reg_h = gen_hw_hdr.process('hw/ip/adc_ctrl/data/adc_ctrl.hjson')
 hw_ip_aes_reg_h = gen_hw_hdr.process('hw/ip/aes/data/aes.hjson')
 hw_ip_alert_handler_reg_h = gen_hw_hdr.process('hw/' + TOPNAME + '/ip_autogen/alert_handler/data/alert_handler.hjson')
