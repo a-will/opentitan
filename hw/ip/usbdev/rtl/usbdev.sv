@@ -1074,12 +1074,12 @@ module usbdev
   `ASSERT_KNOWN(TlOAReadyKnown_A, tl_o.a_ready)
   // These pins are not necessarily associated with any clock but it probably makes most sense to
   // check them on the fastest clock.
-  `ASSERT_KNOWN(USBTxDKnown_A, usb_tx_d_o)
-  `ASSERT_KNOWN(CIODpKnown_A, cio_usb_dp_o)
+  `ASSERT_KNOWN_IF(USBTxDKnown_A, usb_tx_d_o, cio_usb_dp_en_o)
+  `ASSERT_KNOWN_IF(CIODpKnown_A, cio_usb_dp_o, cio_usb_dp_en_o)
   `ASSERT_KNOWN(CIODpEnKnown_A, cio_usb_dp_en_o)
-  `ASSERT_KNOWN(CIODnKnown_A, cio_usb_dn_o)
+  `ASSERT_KNOWN_IF(CIODnKnown_A, cio_usb_dn_o, cio_usb_dn_en_o)
   `ASSERT_KNOWN(CIODnEnKnown_A, cio_usb_dn_en_o)
-  `ASSERT_KNOWN(USBTxSe0Known_A, usb_tx_se0_o)
+  `ASSERT_KNOWN_IF(USBTxSe0Known_A, usb_tx_se0_o, cio_usb_dp_en_o)
   `ASSERT_KNOWN(USBDpPUKnown_A, usb_dp_pullup_o)
   `ASSERT_KNOWN(USBDnPUKnown_A, usb_dn_pullup_o)
   `ASSERT_KNOWN(USBRxEnableKnown_A, usb_rx_enable_o)

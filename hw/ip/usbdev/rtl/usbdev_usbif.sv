@@ -123,14 +123,15 @@ module usbdev_usbif  #(
   logic [31:0]                       wdata_q, wdata_d;
   logic                              mem_read;
   logic [SramAw-1:0]                 mem_waddr, mem_raddr;
-  logic                              bus_reset;
+  logic                              bus_reset, link_reset;
 
   // Make sure out_endpoint_o can safely be used to index signals of NEndpoints width.
   assign out_endpoint_val_o = int'(out_ep_current) < NEndpoints;
   assign out_endpoint_o     = out_endpoint_val_o ? out_ep_current : '0;
 
   assign bus_reset_o    = bus_reset;
-  assign clr_devaddr_o  = ~connect_en_i | bus_reset;
+  assign link_reset     = ~connect_en_i | bus_reset;
+  assign clr_devaddr_o  = link_reset;
   assign link_out_err_o = out_ep_rollback;
 
   always_comb begin

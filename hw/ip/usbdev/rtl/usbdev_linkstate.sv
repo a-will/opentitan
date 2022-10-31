@@ -71,6 +71,8 @@ module usbdev_linkstate (
 
   link_state_e  link_state_d, link_state_q;
   logic         see_pwr_sense;
+  logic         disconnect_link;
+  assign disconnect_link = !see_pwr_sense || !usb_pullup_en_i;
 
   // Reset FSM
   logic [2:0]      bus_rst_timer_d, bus_rst_timer_q;
@@ -141,7 +143,7 @@ module usbdev_linkstate (
 
     // If VBUS ever goes away the link has disconnected (likewise if the
     // pull-up goes away / user requested disconnection)
-    if (!see_pwr_sense || !usb_pullup_en_i) begin
+    if (disconnect_link) begin
       link_state_d = LinkDisconnected;
     end else begin
       unique case (link_state_q)
@@ -247,41 +249,46 @@ module usbdev_linkstate (
     ev_reset          = 1'b0;
     bus_reset         = 1'b0;
 
-    unique case (bus_rst_state_q)
-      // No reset signal detected
-      NoRst: begin
-        if (see_se0) begin
-          bus_rst_state_d = RstCnt;
-          bus_rst_timer_d = 0;
+    if (disconnect_link) begin
+      bus_rst_state_d = NoRst;
+      bus_rst_timer_d = 0;
+    end else begin
+      unique case (bus_rst_state_q)
+        // No reset signal detected
+        NoRst: begin
+          if (see_se0) begin
+            bus_rst_state_d = RstCnt;
+            bus_rst_timer_d = 0;
+          end
         end
-      end
 
-      // Reset signal detected -> counting
-      RstCnt: begin
-        if (!see_se0) begin
-          bus_rst_state_d = NoRst;
-        end else begin
-          if (us_tick_i) begin
-            if (bus_rst_timer_q == RESET_TIMEOUT) begin
-              bus_rst_state_d = RstPend;
-            end else begin
-              bus_rst_timer_d = bus_rst_timer_q + 1;
+        // Reset signal detected -> counting
+        RstCnt: begin
+          if (!see_se0) begin
+            bus_rst_state_d = NoRst;
+          end else begin
+            if (us_tick_i) begin
+              if (bus_rst_timer_q == RESET_TIMEOUT) begin
+                bus_rst_state_d = RstPend;
+              end else begin
+                bus_rst_timer_d = bus_rst_timer_q + 1;
+              end
             end
           end
         end
-      end
 
-      // Detected reset -> wait for falling edge
-      RstPend: begin
-        if (!see_se0) begin
-          bus_rst_state_d = NoRst;
-          ev_reset = 1'b1;
+        // Detected reset -> wait for falling edge
+        RstPend: begin
+          if (!see_se0) begin
+            bus_rst_state_d = NoRst;
+            ev_reset = 1'b1;
+          end
+          bus_reset = 1'b1;
         end
-        bus_reset = 1'b1;
-      end
 
-      default : bus_rst_state_d = NoRst;
-    endcase
+        default : bus_rst_state_d = NoRst;
+      endcase
+    end
   end
 
   `ASSERT(LinkRstStateValid_A, bus_rst_state_q inside {NoRst, RstCnt, RstPend}, clk_48mhz_i)
@@ -308,38 +315,43 @@ module usbdev_linkstate (
     link_inac_timer_d = link_inac_timer_q;
     ev_bus_inactive   = 0;
 
-    unique case (link_inac_state_q)
-      // Active or disabled
-      Active: begin
-        link_inac_timer_d = 0;
-        if (!ev_bus_active && monitor_inac) begin
-          link_inac_state_d = InactCnt;
-        end
-      end
-
-      // Got an inactivity signal -> count duration
-      InactCnt: begin
-        if (ev_bus_active || !monitor_inac) begin
-          link_inac_state_d  = Active;
-        end else if (us_tick_i) begin
-          if (link_inac_timer_q == SUSPEND_TIMEOUT) begin
-            link_inac_state_d = InactPend;
-            ev_bus_inactive = 1;
-          end else begin
-            link_inac_timer_d = link_inac_timer_q + 1;
+    if (disconnect_link) begin
+      link_inac_state_d = Active;
+      link_inac_timer_d = 0;
+    end else begin
+      unique case (link_inac_state_q)
+        // Active or disabled
+        Active: begin
+          link_inac_timer_d = 0;
+          if (!ev_bus_active && monitor_inac) begin
+            link_inac_state_d = InactCnt;
           end
         end
-      end
 
-      // Counter expired & event sent, wait here
-      InactPend: begin
-        if (ev_bus_active || !monitor_inac) begin
-          link_inac_state_d  = Active;
+        // Got an inactivity signal -> count duration
+        InactCnt: begin
+          if (ev_bus_active || !monitor_inac) begin
+            link_inac_state_d  = Active;
+          end else if (us_tick_i) begin
+            if (link_inac_timer_q == SUSPEND_TIMEOUT) begin
+              link_inac_state_d = InactPend;
+              ev_bus_inactive = 1;
+            end else begin
+              link_inac_timer_d = link_inac_timer_q + 1;
+            end
+          end
         end
-      end
 
-      default : link_inac_state_d = Active;
-    endcase
+        // Counter expired & event sent, wait here
+        InactPend: begin
+          if (ev_bus_active || !monitor_inac) begin
+            link_inac_state_d  = Active;
+          end
+        end
+
+        default : link_inac_state_d = Active;
+      endcase
+    end
   end
 
   `ASSERT(LincInacStateValid_A, link_inac_state_q inside {Active, InactCnt, InactPend}, clk_48mhz_i)
