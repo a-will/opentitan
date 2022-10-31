@@ -25,7 +25,7 @@ class chip_sw_usb_ast_clk_calib_vseq extends chip_sw_base_vseq;
   endtask
 
   virtual task connect_usbdev();
-    int link_reset = 0;
+    int bus_reset = 0;
 
     // Force idle to 0 so usbdev does not attempt to suspend.
     void'(cfg.chip_vif.signal_probe_usbdev_rx_idle_det_o(SignalProbeForce, 0));
@@ -38,11 +38,11 @@ class chip_sw_usb_ast_clk_calib_vseq extends chip_sw_base_vseq;
     // is reset, then release reset so the link state
     // will advance to Active.
     `DV_SPINWAIT(
-        while (link_reset == 0) begin
-          link_reset = cfg.chip_vif.signal_probe_usbdev_link_reset_o(SignalProbeSample);
+        while (bus_reset == 0) begin
+          bus_reset = cfg.chip_vif.signal_probe_usbdev_bus_reset_o(SignalProbeSample);
           cfg.chip_vif.usb_clk_rst_if.wait_clks(10);
         end,
-        "timeout waiting for link reset",
+        "timeout waiting for bus reset",
         cfg.sw_test_timeout_ns)
 
     // Release the line.

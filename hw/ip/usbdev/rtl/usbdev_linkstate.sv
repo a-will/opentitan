@@ -21,9 +21,9 @@ module usbdev_linkstate (
   input  logic sof_valid_i,
   input  logic resume_link_active_i, // pulse
 
+  output logic bus_reset_o,        // level. Bus reset symbol active.
   output logic link_disconnect_o,  // level
   output logic link_powered_o,     // level
-  output logic link_reset_o,       // level
   output logic link_active_o,      // level
   output logic link_suspend_o,     // level
   output logic link_resume_o,      // pulse
@@ -61,7 +61,7 @@ module usbdev_linkstate (
     NoRst,
     RstCnt,
     RstPend
-  } link_rst_state_e;
+  } bus_rst_state_e;
 
   typedef enum logic [1:0] {
     Active,
@@ -73,9 +73,9 @@ module usbdev_linkstate (
   logic         see_pwr_sense;
 
   // Reset FSM
-  logic [2:0]      link_rst_timer_d, link_rst_timer_q;
-  link_rst_state_e link_rst_state_d, link_rst_state_q;
-  logic            link_reset; // reset detected (level)
+  logic [2:0]      bus_rst_timer_d, bus_rst_timer_q;
+  bus_rst_state_e  bus_rst_state_d, bus_rst_state_q;
+  logic            bus_reset; // reset detected (level)
 
   // Link inactivity detection
   logic              monitor_inac; // monitor link inactivity
@@ -238,34 +238,34 @@ module usbdev_linkstate (
   /////////////////////
   // Reset detection //
   /////////////////////
-  //  Here we clean up the SE0 signal and generate a signle ev_reset at
+  //  Here we clean up the SE0 signal and generate a single ev_reset at
   //  the end of a valid reset
 
   always_comb begin : proc_rst_fsm
-    link_rst_state_d  = link_rst_state_q;
-    link_rst_timer_d  = link_rst_timer_q;
+    bus_rst_state_d   = bus_rst_state_q;
+    bus_rst_timer_d   = bus_rst_timer_q;
     ev_reset          = 1'b0;
-    link_reset        = 1'b0;
+    bus_reset         = 1'b0;
 
-    unique case (link_rst_state_q)
+    unique case (bus_rst_state_q)
       // No reset signal detected
       NoRst: begin
         if (see_se0) begin
-          link_rst_state_d = RstCnt;
-          link_rst_timer_d = 0;
+          bus_rst_state_d = RstCnt;
+          bus_rst_timer_d = 0;
         end
       end
 
       // Reset signal detected -> counting
       RstCnt: begin
         if (!see_se0) begin
-          link_rst_state_d = NoRst;
+          bus_rst_state_d = NoRst;
         end else begin
           if (us_tick_i) begin
-            if (link_rst_timer_q == RESET_TIMEOUT) begin
-              link_rst_state_d = RstPend;
+            if (bus_rst_timer_q == RESET_TIMEOUT) begin
+              bus_rst_state_d = RstPend;
             end else begin
-              link_rst_timer_d = link_rst_timer_q + 1;
+              bus_rst_timer_d = bus_rst_timer_q + 1;
             end
           end
         end
@@ -274,27 +274,27 @@ module usbdev_linkstate (
       // Detected reset -> wait for falling edge
       RstPend: begin
         if (!see_se0) begin
-          link_rst_state_d = NoRst;
+          bus_rst_state_d = NoRst;
           ev_reset = 1'b1;
         end
-        link_reset = 1'b1;
+        bus_reset = 1'b1;
       end
 
-      default : link_rst_state_d = NoRst;
+      default : bus_rst_state_d = NoRst;
     endcase
   end
 
-  `ASSERT(LinkRstStateValid_A, link_rst_state_q inside {NoRst, RstCnt, RstPend}, clk_48mhz_i)
+  `ASSERT(LinkRstStateValid_A, bus_rst_state_q inside {NoRst, RstCnt, RstPend}, clk_48mhz_i)
 
-  assign link_reset_o = link_reset;
+  assign bus_reset_o = bus_reset;
 
   always_ff @(posedge clk_48mhz_i or negedge rst_ni) begin : proc_reg_rst
     if (!rst_ni) begin
-      link_rst_state_q <= NoRst;
-      link_rst_timer_q <= 0;
+      bus_rst_state_q <= NoRst;
+      bus_rst_timer_q <= 0;
     end else begin
-      link_rst_state_q <= link_rst_state_d;
-      link_rst_timer_q <= link_rst_timer_d;
+      bus_rst_state_q <= bus_rst_state_d;
+      bus_rst_timer_q <= bus_rst_timer_d;
     end
   end
 
@@ -367,7 +367,7 @@ module usbdev_linkstate (
     if (!rst_ni) begin
       missed_sof_count <= '0;
     end else begin
-      if (sof_valid_i || !link_active_o || link_reset) begin
+      if (sof_valid_i || !link_active_o || bus_reset) begin
         missed_sof_count <= '0;
       end else if (sof_missed_o && !host_lost_o) begin
         missed_sof_count <= missed_sof_count + 1;
@@ -380,7 +380,7 @@ module usbdev_linkstate (
     if (!rst_ni) begin
       missing_sof_timer <= '0;
     end else begin
-      if (sof_missed_o || sof_valid_i || !link_active_o || link_reset) begin
+      if (sof_missed_o || sof_valid_i || !link_active_o || bus_reset) begin
         missing_sof_timer <= '0;
       end else if (us_tick_i) begin
         missing_sof_timer <= missing_sof_timer + 1;

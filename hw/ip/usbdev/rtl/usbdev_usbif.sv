@@ -92,10 +92,10 @@ module usbdev_usbif  #(
   output logic [10:0]              frame_o,
   output logic                     sof_valid_o, // Pulses with only host-generated SOF.
                                                 // Used for clock sync.
+  output logic                     bus_reset_o,
   output logic [2:0]               link_state_o,
   output logic                     link_disconnect_o,
   output logic                     link_powered_o,
-  output logic                     link_reset_o,
   output logic                     link_active_o,
   output logic                     link_suspend_o,
   output logic                     link_resume_o,
@@ -123,14 +123,14 @@ module usbdev_usbif  #(
   logic [31:0]                       wdata_q, wdata_d;
   logic                              mem_read;
   logic [SramAw-1:0]                 mem_waddr, mem_raddr;
-  logic                              link_reset;
+  logic                              bus_reset;
 
   // Make sure out_endpoint_o can safely be used to index signals of NEndpoints width.
   assign out_endpoint_val_o = int'(out_ep_current) < NEndpoints;
   assign out_endpoint_o     = out_endpoint_val_o ? out_ep_current : '0;
 
-  assign link_reset_o   = link_reset;
-  assign clr_devaddr_o  = ~connect_en_i | link_reset;
+  assign bus_reset_o    = bus_reset;
+  assign clr_devaddr_o  = ~connect_en_i | bus_reset;
   assign link_out_err_o = out_ep_rollback;
 
   always_comb begin
@@ -377,9 +377,9 @@ module usbdev_usbif  #(
     .rx_j_det_i            (rx_j_det),
     .sof_valid_i           (sof_valid_o),
     .resume_link_active_i  (resume_link_active_i),
+    .bus_reset_o           (bus_reset),
     .link_disconnect_o     (link_disconnect_o),
     .link_powered_o        (link_powered_o),
-    .link_reset_o          (link_reset),
     .link_active_o         (link_active_o),
     .link_suspend_o        (link_suspend_o),
     .link_resume_o         (link_resume_o),

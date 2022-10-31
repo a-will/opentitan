@@ -511,7 +511,7 @@ module usbdev
     .link_state_o         (link_state),
     .link_disconnect_o    (link_disconnect),
     .link_powered_o       (link_powered),
-    .link_reset_o         (link_reset),
+    .bus_reset_o          (link_reset),
     .link_active_o        (link_active),
     .link_suspend_o       (link_suspend),
     .link_resume_o        (event_link_resume),

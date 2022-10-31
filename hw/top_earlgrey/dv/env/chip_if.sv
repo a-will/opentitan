@@ -758,8 +758,8 @@ interface chip_if;
       `USBDEV_HIER.usbdev_impl.u_usbdev_linkstate.line_se0_raw)
 
   // Signal probe function for link reset signal in usbdev.
-  `DV_CREATE_SIGNAL_PROBE_FUNCTION(signal_probe_usbdev_link_reset_o,
-      `USBDEV_HIER.usbdev_impl.u_usbdev_linkstate.link_reset_o)
+  `DV_CREATE_SIGNAL_PROBE_FUNCTION(signal_probe_usbdev_bus_reset_o,
+      `USBDEV_HIER.usbdev_impl.u_usbdev_linkstate.bus_reset_o)
 
   // Signal probe function for SOF valid signal in usbdev.
   `DV_CREATE_SIGNAL_PROBE_FUNCTION(signal_probe_usbdev_sof_valid_o,
