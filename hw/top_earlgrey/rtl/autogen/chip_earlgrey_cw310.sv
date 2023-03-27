@@ -10,6 +10,15 @@
 //                --rnd_cnst_seed 4881560218908238235
 
 
+// MACROs for AST analog simulation support
+`ifdef ANALOGSIM
+  `define INOUT_AI input ast_pkg::awire_t
+  `define INOUT_AO output ast_pkg::awire_t
+`else
+  `define INOUT_AI inout
+  `define INOUT_AO inout
+`endif
+
 module chip_earlgrey_cw310 #(
   // Path to a VMEM file containing the contents of the boot ROM, which will be
   // baked into the FPGA bitstream.

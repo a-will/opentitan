@@ -68,6 +68,15 @@ unused_im_defs, undriven_im_defs = lib.get_dangling_im_def(top["inter_signal"]["
 
 %>\
 
+// MACROs for AST analog simulation support
+`ifdef ANALOGSIM
+  `define INOUT_AI input ast_pkg::awire_t
+  `define INOUT_AO output ast_pkg::awire_t
+`else
+  `define INOUT_AI inout
+  `define INOUT_AO inout
+`endif
+
 % if target["name"] != "asic":
 module chip_${top["name"]}_${target["name"]} #(
   // Path to a VMEM file containing the contents of the boot ROM, which will be

@@ -10,6 +10,15 @@
 //                --rnd_cnst_seed 4881560218908238235
 
 
+// MACROs for AST analog simulation support
+`ifdef ANALOGSIM
+  `define INOUT_AI input ast_pkg::awire_t
+  `define INOUT_AO output ast_pkg::awire_t
+`else
+  `define INOUT_AI inout
+  `define INOUT_AO inout
+`endif
+
 module chip_earlgrey_asic #(
   parameter bit SecRomCtrlDisableScrambling = 1'b0
 ) (
