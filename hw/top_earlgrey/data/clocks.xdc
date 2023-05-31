@@ -12,7 +12,7 @@ create_generated_clock -name clk_usb_48 [get_pin clkgen/pll/CLKOUT1]
 create_generated_clock -name clk_aon [get_pin clkgen/pll/CLKOUT4]
 
 ## Clock Domain Crossings
-set clks_10_unbuf [get_clocks -of_objects [get_pin clkgen/pll/CLKOUT0]]
+set clks_main_unbuf [get_clocks -of_objects [get_pin clkgen/pll/CLKOUT0]]
 set clks_48_unbuf [get_clocks -of_objects [get_pin clkgen/pll/CLKOUT1]]
 set clks_aon_unbuf [get_clocks -of_objects [get_pin clkgen/pll/CLKOUT4]]
 
