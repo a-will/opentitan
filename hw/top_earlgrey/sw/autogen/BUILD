@@ -17,6 +17,11 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "devicetree",
+    hdrs = ["devicetree.dtsi"],
+)
+
 ld_library(
     name = "top_earlgrey_memory",
     includes = ["top_earlgrey_memory.ld"],
@@ -25,4 +30,9 @@ ld_library(
 filegroup(
     name = "all_files",
     srcs = glob(["**"]),
+)
+
+cc_library(
+    name = "earlgrey_devicetree",
+    hdrs = ["devicetree.dtsi"],
 )
