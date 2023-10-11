@@ -1736,6 +1736,13 @@ def main():
                 cformat_path = cformat_dir / ".clang-format"
                 cformat_path.write_text(cformat_tplpath.read_text())
 
+                # "toplevel.dtsi.tpl" -> "sw/autogen/devicetree.dtsi"
+                dts_path = cformat_dir / f"devicetree{addr_space_suffix}.dtsi"
+                render_template(TOPGEN_TEMPLATE_PATH / "toplevel.dtsi.tpl",
+                                dts_path,
+                                addr_space=addr_space['name'],
+                                helper=c_helper)
+
                 # Save the header macro prefix into `c_helper`
                 rel_header_dir = cformat_dir.relative_to(root_paths[idx])
                 c_helper.header_macro_prefix = (

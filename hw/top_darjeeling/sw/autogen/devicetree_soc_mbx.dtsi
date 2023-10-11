@@ -1,0 +1,221 @@
+// Copyright lowRISC contributors.
+// Licensed under the Apache License, Version 2.0, see LICENSE for details.
+// SPDX-License-Identifier: Apache-2.0
+
+/dts-v1/;
+
+/**
+ * Pinmux peripheral input mux IDs.
+ */
+/** Peripheral Input 0 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_12 0
+/** Peripheral Input 1 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_13 1
+/** Peripheral Input 2 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_14 2
+/** Peripheral Input 3 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_15 3
+
+/**
+ * Pinmux input selection IDs for pads or tied values.
+ */
+/** Tie constantly to zero */
+#define TOP_DARJEELING_PINMUX_INSEL_CONSTANT_ZERO 0
+/** Tie constantly to one */
+#define TOP_DARJEELING_PINMUX_INSEL_CONSTANT_ONE 1
+/** MIO Pad 0 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO0 2
+/** MIO Pad 1 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO1 3
+/** MIO Pad 2 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO2 4
+/** MIO Pad 3 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO3 5
+/** MIO Pad 4 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO4 6
+/** MIO Pad 5 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO5 7
+/** MIO Pad 6 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO6 8
+/** MIO Pad 7 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO7 9
+/** MIO Pad 8 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO8 10
+/** MIO Pad 9 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO9 11
+/** MIO Pad 10 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO10 12
+/** MIO Pad 11 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO11 13
+
+/**
+ * Pinmux pad output mux IDs.
+ */
+/** MIO Pad 0 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO0 0
+/** MIO Pad 1 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO1 1
+/** MIO Pad 2 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO2 2
+/** MIO Pad 3 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO3 3
+/** MIO Pad 4 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO4 4
+/** MIO Pad 5 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO5 5
+/** MIO Pad 6 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO6 6
+/** MIO Pad 7 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO7 7
+/** MIO Pad 8 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO8 8
+/** MIO Pad 9 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO9 9
+/** MIO Pad 10 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO10 10
+/** MIO Pad 11 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO11 11
+
+/**
+ * Pinmux output selection IDs for peripherals or tied values.
+ */
+/** Tie constantly to zero */
+#define TOP_DARJEELING_PINMUX_OUTSEL_CONSTANT_ZERO 0
+/** Tie constantly to one */
+#define TOP_DARJEELING_PINMUX_OUTSEL_CONSTANT_ONE 1
+/** Tie constantly to high-Z */
+#define TOP_DARJEELING_PINMUX_OUTSEL_CONSTANT_HIGH_Z 2
+/** Peripheral Output 0 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_12 3
+/** Peripheral Output 1 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_13 4
+/** Peripheral Output 2 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_14 5
+/** Peripheral Output 3 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_15 6
+/** Peripheral Output 4 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_OTP_MACRO_TEST_0 7
+
+#define OPENTITAN_PINMUX(mux_id, select_id)     ((mux_id << 16) | (select_id))
+
+/ {
+    #address-cells = <1>;
+    #size-cells = <1>;
+    model = "lowrisc,darjeeling";
+    compatible = "lowrisc,darjeeling";
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        hart0: cpu@0 {
+            compatible = "riscv";
+            device_type = "cpu";
+            reg = <0>;
+            status = "okay";
+
+            hlic: interrupt-controller {
+                compatible = "riscv,cpu-intc";
+                #interrupt-cells = <1>;
+                interrupt-controller;
+            };
+        };
+    };
+
+
+    bus {
+        compatible = "simple-bus";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+
+        mbx0: mbx@1465000 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01465000 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <132 0>, <133 0>, <134 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx1: mbx@1465100 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01465100 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <135 0>, <136 0>, <137 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx2: mbx@1465200 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01465200 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <138 0>, <139 0>, <140 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx3: mbx@1465300 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01465300 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <141 0>, <142 0>, <143 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx4: mbx@1465400 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01465400 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <144 0>, <145 0>, <146 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx5: mbx@1465500 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01465500 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <147 0>, <148 0>, <149 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx6: mbx@1496000 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01496000 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <150 0>, <151 0>, <152 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx_pcie0: mbx@1460100 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01460100 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <156 0>, <157 0>, <158 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx_pcie1: mbx@1460200 {
+            compatible = "lowrisc,mbx";
+            reg = <0x01460200 0x00000020>;
+            reg-names = "soc";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <159 0>, <160 0>, <161 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        racl_ctrl: racl_ctrl@1461f00 {
+            compatible = "lowrisc,racl_ctrl";
+            reg = <0x01461f00 0x00000100>;
+            reg-names = "racl_ctrl";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <162 0>;
+            interrupt-names = "racl_error";
+        };
+        ac_range_check: ac_range_check@1464000 {
+            compatible = "lowrisc,ac_range_check";
+            reg = <0x01464000 0x00000400>;
+            reg-names = "ac_range_check";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <163 0>;
+            interrupt-names = "deny_cnt_reached";
+        };
+    };
+};

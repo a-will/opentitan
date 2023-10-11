@@ -1,0 +1,514 @@
+// Copyright lowRISC contributors.
+// Licensed under the Apache License, Version 2.0, see LICENSE for details.
+// SPDX-License-Identifier: Apache-2.0
+
+/dts-v1/;
+
+/**
+ * Pinmux peripheral input mux IDs.
+ */
+/** Peripheral Input 0 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_12 0
+/** Peripheral Input 1 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_13 1
+/** Peripheral Input 2 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_14 2
+/** Peripheral Input 3 */
+#define TOP_DARJEELING_PINMUX_PERIPHERAL_IN_SOC_PROXY_SOC_GPI_15 3
+
+/**
+ * Pinmux input selection IDs for pads or tied values.
+ */
+/** Tie constantly to zero */
+#define TOP_DARJEELING_PINMUX_INSEL_CONSTANT_ZERO 0
+/** Tie constantly to one */
+#define TOP_DARJEELING_PINMUX_INSEL_CONSTANT_ONE 1
+/** MIO Pad 0 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO0 2
+/** MIO Pad 1 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO1 3
+/** MIO Pad 2 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO2 4
+/** MIO Pad 3 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO3 5
+/** MIO Pad 4 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO4 6
+/** MIO Pad 5 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO5 7
+/** MIO Pad 6 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO6 8
+/** MIO Pad 7 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO7 9
+/** MIO Pad 8 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO8 10
+/** MIO Pad 9 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO9 11
+/** MIO Pad 10 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO10 12
+/** MIO Pad 11 */
+#define TOP_DARJEELING_PINMUX_INSEL_MIO11 13
+
+/**
+ * Pinmux pad output mux IDs.
+ */
+/** MIO Pad 0 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO0 0
+/** MIO Pad 1 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO1 1
+/** MIO Pad 2 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO2 2
+/** MIO Pad 3 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO3 3
+/** MIO Pad 4 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO4 4
+/** MIO Pad 5 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO5 5
+/** MIO Pad 6 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO6 6
+/** MIO Pad 7 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO7 7
+/** MIO Pad 8 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO8 8
+/** MIO Pad 9 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO9 9
+/** MIO Pad 10 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO10 10
+/** MIO Pad 11 */
+#define TOP_DARJEELING_PINMUX_MIO_OUT_MIO11 11
+
+/**
+ * Pinmux output selection IDs for peripherals or tied values.
+ */
+/** Tie constantly to zero */
+#define TOP_DARJEELING_PINMUX_OUTSEL_CONSTANT_ZERO 0
+/** Tie constantly to one */
+#define TOP_DARJEELING_PINMUX_OUTSEL_CONSTANT_ONE 1
+/** Tie constantly to high-Z */
+#define TOP_DARJEELING_PINMUX_OUTSEL_CONSTANT_HIGH_Z 2
+/** Peripheral Output 0 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_12 3
+/** Peripheral Output 1 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_13 4
+/** Peripheral Output 2 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_14 5
+/** Peripheral Output 3 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_SOC_PROXY_SOC_GPO_15 6
+/** Peripheral Output 4 */
+#define TOP_DARJEELING_PINMUX_OUTSEL_OTP_MACRO_TEST_0 7
+
+#define OPENTITAN_PINMUX(mux_id, select_id)     ((mux_id << 16) | (select_id))
+
+/ {
+    #address-cells = <1>;
+    #size-cells = <1>;
+    model = "lowrisc,darjeeling";
+    compatible = "lowrisc,darjeeling";
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        hart0: cpu@0 {
+            compatible = "riscv";
+            device_type = "cpu";
+            reg = <0>;
+            status = "okay";
+
+            hlic: interrupt-controller {
+                compatible = "riscv,cpu-intc";
+                #interrupt-cells = <1>;
+                interrupt-controller;
+            };
+        };
+    };
+
+    /**
+     * Memory for ctn in top darjeeling.
+     */
+    ctn: memory@40000000 {
+        device_type = "memory";
+        reg = <0x40000000 0x40000000>;
+    };
+
+    /**
+     * Memory for ram_ret_aon in top darjeeling.
+     */
+    ram_ret_aon: memory@30600000 {
+        device_type = "memory";
+        reg = <0x30600000 0x00001000>;
+    };
+
+    /**
+     * Memory for ram_main in top darjeeling.
+     */
+    ram_main: memory@10000000 {
+        device_type = "memory";
+        reg = <0x10000000 0x00010000>;
+    };
+
+    /**
+     * Memory for ram_mbox in top darjeeling.
+     */
+    ram_mbox: memory@11000000 {
+        device_type = "memory";
+        reg = <0x11000000 0x00001000>;
+    };
+
+    /**
+     * Memory for rom0 in top darjeeling.
+     */
+    rom0: memory@8000 {
+        device_type = "memory";
+        reg = <0x00008000 0x00008000>;
+    };
+
+    /**
+     * Memory for rom1 in top darjeeling.
+     */
+    rom1: memory@20000 {
+        device_type = "memory";
+        reg = <0x00020000 0x00010000>;
+    };
+
+
+    bus {
+        compatible = "simple-bus";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+
+        uart0: uart@30010000 {
+            compatible = "lowrisc,uart";
+            reg = <0x30010000 0x00000040>;
+            reg-names = "uart";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <1 0>, <2 0>, <3 0>, <4 0>, <5 0>, <6 0>, <7 0>, <8 0>, <9 0>;
+            interrupt-names = "tx_watermark", "rx_watermark", "tx_done", "rx_overflow", "rx_frame_err", "rx_break_err", "rx_timeout", "rx_parity_err", "tx_empty";
+        };
+        gpio: gpio@30000000 {
+            compatible = "lowrisc,gpio";
+            reg = <0x30000000 0x00000100>;
+            reg-names = "gpio";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <10 0>, <11 0>, <12 0>, <13 0>, <14 0>, <15 0>, <16 0>, <17 0>, <18 0>, <19 0>, <20 0>, <21 0>, <22 0>, <23 0>, <24 0>, <25 0>, <26 0>, <27 0>, <28 0>, <29 0>, <30 0>, <31 0>, <32 0>, <33 0>, <34 0>, <35 0>, <36 0>, <37 0>, <38 0>, <39 0>, <40 0>, <41 0>;
+            interrupt-names = "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7", "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14", "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21", "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio28", "gpio29", "gpio30", "gpio31";
+        };
+        spi_device: spi_device@30310000 {
+            compatible = "lowrisc,spi_device";
+            reg = <0x30310000 0x00002000>;
+            reg-names = "spi_device";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <42 0>, <43 0>, <44 0>, <45 0>, <46 0>, <47 0>, <48 0>, <49 0>;
+            interrupt-names = "upload_cmdfifo_not_empty", "upload_payload_not_empty", "upload_payload_overflow", "readbuf_watermark", "readbuf_flip", "tpm_header_not_empty", "tpm_rdfifo_cmd_end", "tpm_rdfifo_drop";
+        };
+        i2c0: i2c@30080000 {
+            compatible = "lowrisc,i2c";
+            reg = <0x30080000 0x00000080>;
+            reg-names = "i2c";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <50 0>, <51 0>, <52 0>, <53 0>, <54 0>, <55 0>, <56 0>, <57 0>, <58 0>, <59 0>, <60 0>, <61 0>, <62 0>, <63 0>, <64 0>;
+            interrupt-names = "fmt_threshold", "rx_threshold", "acq_threshold", "rx_overflow", "controller_halt", "scl_interference", "sda_interference", "stretch_timeout", "sda_unstable", "cmd_complete", "tx_stretch", "tx_threshold", "acq_stretch", "unexp_stop", "host_timeout";
+        };
+        rv_timer: rv_timer@30100000 {
+            compatible = "lowrisc,rv_timer";
+            reg = <0x30100000 0x00000200>;
+            reg-names = "rv_timer";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <65 0>;
+            interrupt-names = "timer_expired_hart0_timer0";
+        };
+        otp_ctrl: otp_ctrl@30130000 {
+            compatible = "lowrisc,otp_ctrl";
+            reg = <0x30130000 0x00008000>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <66 0>, <67 0>;
+            interrupt-names = "otp_operation_done", "otp_error";
+        };
+        otp_macro: otp_macro@30140000 {
+            compatible = "lowrisc,otp_macro";
+            reg = <0x30140000 0x00000020>;
+            reg-names = "prim";
+        };
+        lc_ctrl: lc_ctrl@30150000 {
+            compatible = "lowrisc,lc_ctrl";
+            reg = <0x30150000 0x00000100>;
+            reg-names = "regs";
+        };
+        alert_handler: alert_handler@30160000 {
+            compatible = "lowrisc,alert_handler";
+            reg = <0x30160000 0x00000800>;
+            reg-names = "alert_handler";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <68 0>, <69 0>, <70 0>, <71 0>;
+            interrupt-names = "classa", "classb", "classc", "classd";
+        };
+        spi_host0: spi_host@30300000 {
+            compatible = "lowrisc,spi_host";
+            reg = <0x30300000 0x00000040>;
+            reg-names = "spi_host";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <72 0>, <73 0>;
+            interrupt-names = "error", "spi_event";
+        };
+        pwrmgr_aon: pwrmgr@30400000 {
+            compatible = "lowrisc,pwrmgr";
+            reg = <0x30400000 0x00000080>;
+            reg-names = "pwrmgr";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <74 0>;
+            interrupt-names = "wakeup";
+        };
+        rstmgr_aon: rstmgr@30410000 {
+            compatible = "lowrisc,rstmgr";
+            reg = <0x30410000 0x00000080>;
+            reg-names = "rstmgr";
+        };
+        clkmgr_aon: clkmgr@30420000 {
+            compatible = "lowrisc,clkmgr";
+            reg = <0x30420000 0x00000040>;
+            reg-names = "clkmgr";
+        };
+        pinmux_aon: pinmux@30460000 {
+            compatible = "lowrisc,pinmux";
+            reg = <0x30460000 0x00000800>;
+            reg-names = "pinmux";
+        };
+        aon_timer_aon: aon_timer@30470000 {
+            compatible = "lowrisc,aon_timer";
+            reg = <0x30470000 0x00000040>;
+            reg-names = "aon_timer";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <75 0>, <76 0>;
+            interrupt-names = "wkup_timer_expired", "wdog_timer_bark";
+        };
+        ast: ast@30480000 {
+            compatible = "lowrisc,ast";
+            reg = <0x30480000 0x00000400>;
+            reg-names = "ast";
+        };
+        soc_proxy: soc_proxy@22030000 {
+            compatible = "lowrisc,soc_proxy";
+            reg = <0x22030000 0x00000010
+                   0x40000000 0x40000000>;
+            reg-names = "core", "ctn";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <77 0>, <78 0>, <79 0>, <80 0>, <81 0>, <82 0>, <83 0>, <84 0>, <85 0>, <86 0>, <87 0>, <88 0>, <89 0>, <90 0>, <91 0>, <92 0>, <93 0>, <94 0>, <95 0>, <96 0>, <97 0>, <98 0>, <99 0>, <100 0>, <101 0>, <102 0>, <103 0>, <104 0>, <105 0>, <106 0>, <107 0>, <108 0>;
+            interrupt-names = "external0", "external1", "external2", "external3", "external4", "external5", "external6", "external7", "external8", "external9", "external10", "external11", "external12", "external13", "external14", "external15", "external16", "external17", "external18", "external19", "external20", "external21", "external22", "external23", "external24", "external25", "external26", "external27", "external28", "external29", "external30", "external31";
+        };
+        sram_ctrl_ret_aon: sram_ctrl@30500000 {
+            compatible = "lowrisc,sram_ctrl";
+            reg = <0x30500000 0x00000040
+                   0x30600000 0x00001000>;
+            reg-names = "regs", "ram";
+        };
+        rv_dm: rv_dm@21200000 {
+            compatible = "lowrisc,rv_dm";
+            reg = <0x21200000 0x00000010
+                   0x00040000 0x00001000>;
+            reg-names = "regs", "mem";
+        };
+        rv_plic: rv_plic@28000000 {
+            compatible = "lowrisc,rv_plic", "sifive,plic-1.0.0";
+            reg = <0x28000000 0x08000000>;
+            reg-names = "rv_plic";
+            interrupt-controller;
+            #interrupt-cells = <2>;
+            riscv,max-priority = <3>;
+            riscv,ndev = <164>;
+            interrupts-extended = <&hlic 11>;
+            interrupt-names = "hart0_external";
+        };
+        aes: aes@21100000 {
+            compatible = "lowrisc,aes";
+            reg = <0x21100000 0x00000100>;
+            reg-names = "aes";
+        };
+        hmac: hmac@21110000 {
+            compatible = "lowrisc,hmac";
+            reg = <0x21110000 0x00002000>;
+            reg-names = "hmac";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <109 0>, <110 0>, <111 0>;
+            interrupt-names = "hmac_done", "fifo_empty", "hmac_err";
+        };
+        kmac: kmac@21120000 {
+            compatible = "lowrisc,kmac";
+            reg = <0x21120000 0x00001000>;
+            reg-names = "kmac";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <112 0>, <113 0>, <114 0>;
+            interrupt-names = "kmac_done", "fifo_empty", "kmac_err";
+        };
+        otbn: otbn@21130000 {
+            compatible = "lowrisc,otbn";
+            reg = <0x21130000 0x00010000>;
+            reg-names = "otbn";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <115 0>;
+            interrupt-names = "done";
+        };
+        keymgr_dpe: keymgr_dpe@21140000 {
+            compatible = "lowrisc,keymgr_dpe";
+            reg = <0x21140000 0x00000100>;
+            reg-names = "keymgr_dpe";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <116 0>;
+            interrupt-names = "op_done";
+        };
+        csrng: csrng@21150000 {
+            compatible = "lowrisc,csrng";
+            reg = <0x21150000 0x00000080>;
+            reg-names = "csrng";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <117 0>, <118 0>, <119 0>, <120 0>;
+            interrupt-names = "cs_cmd_req_done", "cs_entropy_req", "cs_hw_inst_exc", "cs_fatal_err";
+        };
+        entropy_src: entropy_src@21160000 {
+            compatible = "lowrisc,entropy_src";
+            reg = <0x21160000 0x00000100>;
+            reg-names = "entropy_src";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <121 0>, <122 0>, <123 0>, <124 0>;
+            interrupt-names = "es_entropy_valid", "es_health_test_failed", "es_observe_fifo_ready", "es_fatal_err";
+        };
+        edn0: edn@21170000 {
+            compatible = "lowrisc,edn";
+            reg = <0x21170000 0x00000080>;
+            reg-names = "edn";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <125 0>, <126 0>;
+            interrupt-names = "edn_cmd_req_done", "edn_fatal_err";
+        };
+        edn1: edn@21180000 {
+            compatible = "lowrisc,edn";
+            reg = <0x21180000 0x00000080>;
+            reg-names = "edn";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <127 0>, <128 0>;
+            interrupt-names = "edn_cmd_req_done", "edn_fatal_err";
+        };
+        sram_ctrl_main: sram_ctrl@211c0000 {
+            compatible = "lowrisc,sram_ctrl";
+            reg = <0x211c0000 0x00000040
+                   0x10000000 0x00010000>;
+            reg-names = "regs", "ram";
+        };
+        sram_ctrl_mbox: sram_ctrl@211d0000 {
+            compatible = "lowrisc,sram_ctrl";
+            reg = <0x211d0000 0x00000040
+                   0x11000000 0x00001000>;
+            reg-names = "regs", "ram";
+        };
+        rom_ctrl0: rom_ctrl@211e0000 {
+            compatible = "lowrisc,rom_ctrl";
+            reg = <0x211e0000 0x00000080
+                   0x00008000 0x00008000>;
+            reg-names = "regs", "rom";
+        };
+        rom_ctrl1: rom_ctrl@211e1000 {
+            compatible = "lowrisc,rom_ctrl";
+            reg = <0x211e1000 0x00000080
+                   0x00020000 0x00010000>;
+            reg-names = "regs", "rom";
+        };
+        dma: dma@22010000 {
+            compatible = "lowrisc,dma";
+            reg = <0x22010000 0x00000200>;
+            reg-names = "dma";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <129 0>, <130 0>, <131 0>;
+            interrupt-names = "dma_done", "dma_chunk_done", "dma_error";
+        };
+        mbx0: mbx@22000000 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000000 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <132 0>, <133 0>, <134 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx1: mbx@22000100 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000100 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <135 0>, <136 0>, <137 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx2: mbx@22000200 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000200 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <138 0>, <139 0>, <140 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx3: mbx@22000300 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000300 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <141 0>, <142 0>, <143 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx4: mbx@22000400 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000400 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <144 0>, <145 0>, <146 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx5: mbx@22000500 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000500 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <147 0>, <148 0>, <149 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx6: mbx@22000600 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000600 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <150 0>, <151 0>, <152 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx_jtag: mbx@22000800 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22000800 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <153 0>, <154 0>, <155 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx_pcie0: mbx@22040000 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22040000 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <156 0>, <157 0>, <158 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        mbx_pcie1: mbx@22040100 {
+            compatible = "lowrisc,mbx";
+            reg = <0x22040100 0x00000080>;
+            reg-names = "core";
+            interrupt-parent = <&rv_plic>;
+            interrupts = <159 0>, <160 0>, <161 0>;
+            interrupt-names = "mbx_ready", "mbx_abort", "mbx_error";
+        };
+        soc_dbg_ctrl: soc_dbg_ctrl@30170000 {
+            compatible = "lowrisc,soc_dbg_ctrl";
+            reg = <0x30170000 0x00000020>;
+            reg-names = "core";
+        };
+        rv_core_ibex: rv_core_ibex@211f0000 {
+            compatible = "lowrisc,rv_core_ibex";
+            reg = <0x211f0000 0x00000800>;
+            reg-names = "cfg";
+        };
+    };
+};
