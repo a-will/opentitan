@@ -33,3 +33,8 @@ ld_library(
     includes = ["${top_name}_memory.ld"],
     target_compatible_with = opentitan_require_top("${top["name"]}"),
 )
+
+cc_library(
+    name = "devicetree",
+    hdrs = ["devicetree.dtsi"],
+)

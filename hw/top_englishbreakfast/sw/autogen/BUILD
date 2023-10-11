@@ -34,3 +34,8 @@ ld_library(
     includes = ["top_englishbreakfast_memory.ld"],
     target_compatible_with = opentitan_require_top("englishbreakfast"),
 )
+
+cc_library(
+    name = "devicetree",
+    hdrs = ["devicetree.dtsi"],
+)

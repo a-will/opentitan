@@ -34,3 +34,8 @@ ld_library(
     includes = ["top_darjeeling_memory.ld"],
     target_compatible_with = opentitan_require_top("darjeeling"),
 )
+
+cc_library(
+    name = "devicetree",
+    hdrs = ["devicetree.dtsi"],
+)
