@@ -1,4 +1,4 @@
-# Copyright lowRISC contributors (OpenTitan project).
+# Copyright lowRISC contributors.
 # Licensed under the Apache License, Version 2.0, see LICENSE for details.
 # SPDX-License-Identifier: Apache-2.0
 
@@ -70,6 +70,8 @@ fpga_cw310(
     libs = [
         "//sw/device/lib/arch:boot_stage_rom_ext",
         "//sw/device/lib/arch:fpga_cw310",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_creator_slot_a",
     rom_scramble_config = "//hw/top_earlgrey/data:autogen/top_earlgrey.gen.hjson",
@@ -128,6 +130,8 @@ fpga_cw310(
     libs = [
         "//sw/device/lib/arch:boot_stage_owner",
         "//sw/device/lib/arch:fpga_cw310",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_owner_slot_a",
     manifest = "//sw/device/silicon_owner:manifest",
@@ -183,6 +187,8 @@ fpga_cw310(
     libs = [
         "//sw/device/lib/arch:boot_stage_owner",
         "//sw/device/lib/arch:fpga_cw310",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_owner_slot_a",
     manifest = "//sw/device/silicon_owner:manifest",
@@ -230,6 +236,8 @@ fpga_cw310(
     libs = [
         "//sw/device/lib/arch:boot_stage_owner",
         "//sw/device/lib/arch:fpga_cw310",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     otp = "//hw/ip/otp_ctrl/data/earlgrey_skus/sival:otp_img_prod_manuf_personalized",
     rom_ext = "//sw/device/silicon_creator/rom_ext:rom_ext_slot_a",
@@ -251,6 +259,8 @@ fpga_cw305(
     libs = [
         "//sw/device/lib/arch:boot_stage_rom_ext",
         "//sw/device/lib/arch:fpga_cw305",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_creator_slot_a",
     rom_scramble_config = "//hw/top_earlgrey/data:autogen/top_earlgrey.gen.hjson",
@@ -279,6 +289,8 @@ fpga_cw340(
     libs = [
         "//sw/device/lib/arch:boot_stage_rom_ext",
         "//sw/device/lib/arch:fpga_cw340",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_creator_slot_a",
     param = {
@@ -411,6 +423,8 @@ silicon(
     libs = [
         "//sw/device/lib/arch:boot_stage_rom_ext",
         "//sw/device/lib/arch:silicon",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_creator_slot_a",
     manifest = "//sw/device/silicon_creator/rom_ext:manifest",
@@ -441,6 +455,8 @@ silicon(
     libs = [
         "//sw/device/lib/arch:boot_stage_owner",
         "//sw/device/lib/arch:silicon",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_owner_slot_a",
     manifest = "//sw/device/silicon_owner:manifest",
@@ -501,6 +517,8 @@ sim_verilator(
     libs = [
         "//sw/device/lib/arch:boot_stage_rom_ext",
         "//sw/device/lib/arch:sim_verilator",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_creator_slot_a",
     otp = "//hw/ip/otp_ctrl/data:img_rma",
@@ -561,6 +579,8 @@ sim_dv(
     libs = [
         "//sw/device/lib/arch:boot_stage_rom_ext",
         "//sw/device/lib/arch:sim_dv",
+        "//hw/top_earlgrey/sw/autogen:devicetables",
+        "//hw/top_earlgrey/sw/cw310:devicetables",
     ],
     linker_script = "//sw/device/lib/testing/test_framework:ottf_ld_silicon_creator_slot_a",
     otp = "//hw/ip/otp_ctrl/data:img_rma",
