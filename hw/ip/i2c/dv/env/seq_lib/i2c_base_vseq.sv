@@ -18,6 +18,8 @@ class i2c_base_vseq extends cip_base_vseq #(
   i2c_item                    fmt_item;
 
   // random property
+  rand bit                    multi_controller_mode;
+
   rand uint                   fmt_fifo_access_dly;
   rand uint                   rx_fifo_access_dly;
   rand uint                   clear_intr_dly;
@@ -50,7 +52,7 @@ class i2c_base_vseq extends cip_base_vseq #(
   rand bit [15:0]             thd_dat;    // data hold time in clock units
   rand bit [15:0]             t_buf;      // bus free time between STOP and START in clock units
   rand bit [30:0]             t_timeout;  // max time target may stretch the clock
-  rand bit                    e_timeout;  // max time target may stretch the clock
+  rand i2c_timeout_mode_e     e_timeout;  // timeout mode
   rand uint                   t_sda_unstable;     // sda unstable time during the posedge_clock
   rand uint                   t_sda_interference; // sda interference time during the posedge_clock
   rand uint                   t_scl_interference; // scl interference time during the posedge_clock
@@ -173,7 +175,21 @@ class i2c_base_vseq extends cip_base_vseq #(
 
   // constraints for i2c timing registers
   constraint t_timeout_c {
-    t_timeout inside {[cfg.seq_cfg.i2c_min_timing : cfg.seq_cfg.i2c_max_timing]};
+    solve tlow, thigh, e_timeout before t_timeout;
+
+    if (e_timeout == TimeOutModeBus) {
+      if (cfg.slow_acq) {
+        // Set bus timeout to be completely inert during the up to 50 us ACQ
+        // FIFO handling delays.
+        t_timeout == 28'hFFF_FFFF;
+      } else {
+        // 2000 is how long process_interrupts() takes to handle NACKs, and
+        // a bus timeout should not occur in normal handling of NACKs.
+        t_timeout inside {[2000 + 5*(thigh + tlow) : 2000 + 10*(thigh + tlow)]};
+      }
+    } else {
+      t_timeout inside {[cfg.seq_cfg.i2c_min_timing : cfg.seq_cfg.i2c_max_timing]};
+    }
   }
 
   constraint timing_val_c {
@@ -241,7 +257,11 @@ class i2c_base_vseq extends cip_base_vseq #(
     sent_txn_cnt = 0;
     cfg.m_i2c_agent_cfg.sent_rd_byte = 0;
     cfg.m_i2c_agent_cfg.rcvd_rd_byte = 0;
-    host_timeout_ctrl = 32'hffff;
+    if (multi_controller_mode) begin
+      host_timeout_ctrl = 32'd50;
+    end else begin
+      host_timeout_ctrl = 32'hffff;
+    end
     cfg.m_i2c_agent_cfg.allow_ack_stop = 0;
     expected_intr.delete();
 
@@ -290,10 +310,18 @@ class i2c_base_vseq extends cip_base_vseq #(
     bit [TL_DW-1:0] intr_state;
 
     `uvm_info(`gfn, $sformatf("\n  initialize host in mode %s", mode.name()), UVM_DEBUG)
+    `uvm_info(`gfn, $sformatf("\n  multi-controller mode is %d", multi_controller_mode), UVM_MEDIUM)
     if (mode == Host) begin
       ral.ctrl.enablehost.set(1'b1);
       ral.ctrl.enabletarget.set(1'b0);
       ral.ctrl.llpbk.set(1'b0);
+      if (multi_controller_mode) begin
+        ral.host_timeout_ctrl.set(20'd50);
+        csr_update(ral.host_timeout_ctrl);
+        ral.ctrl.enabletarget.set(1'b1);
+        ral.ctrl.ack_ctrl_en.set(cfg.ack_ctrl_en);
+        ral.ctrl.multi_controller_monitor_en.set(1'b1);
+      end
       csr_update(ral.ctrl);
       // diable override
       ral.ovrd.txovrden.set(1'b0);
@@ -303,6 +331,10 @@ class i2c_base_vseq extends cip_base_vseq #(
       ral.ctrl.enabletarget.set(1'b1);
       ral.ctrl.llpbk.set(1'b0);
       ral.ctrl.ack_ctrl_en.set(cfg.ack_ctrl_en);
+      if (multi_controller_mode) begin
+        ral.ctrl.enablehost.set(1'b1);
+        ral.ctrl.multi_controller_monitor_en.set(1'b1);
+      end
       csr_update(ral.ctrl);
       ral.target_id.address0.set(target_addr0);
       ral.target_id.mask0.set(7'h7f);
@@ -371,7 +403,7 @@ class i2c_base_vseq extends cip_base_vseq #(
 
   function automatic void get_timing_values();
     // derived timing parameters
-    timing_cfg.enbTimeOut  = e_timeout;
+    timing_cfg.timeOutMode = e_timeout;
     timing_cfg.tTimeOut    = t_timeout;
     timing_cfg.tSetupStart = t_r + tsu_sta;
     timing_cfg.tHoldStart  = t_f + thd_sta;
@@ -426,8 +458,9 @@ class i2c_base_vseq extends cip_base_vseq #(
     ral.timing4.tsu_sto.set(tsu_sto);
     ral.timing4.t_buf.set(t_buf);
     csr_update(.csr(ral.timing4));
-    ral.timeout_ctrl.en.set(e_timeout);
+    ral.timeout_ctrl.en.set(e_timeout != TimeOutModeDisabled);
     ral.timeout_ctrl.val.set(t_timeout);
+    ral.timeout_ctrl.mode.set(e_timeout == TimeOutModeBus);
     csr_update(.csr(ral.timeout_ctrl));
     // configure i2c_agent_cfg
     cfg.m_i2c_agent_cfg.timing_cfg = timing_cfg;

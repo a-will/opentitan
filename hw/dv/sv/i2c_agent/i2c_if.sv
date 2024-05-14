@@ -229,7 +229,7 @@ interface i2c_if(
     // First, wait for clock stretching to end before driving the bit.
     // tStretchHostClock represents the extra cycles tacked on from stretching.
     if (can_stretch) begin
-      `uvm_info(msg_id, "Device stretch SCL", UVM_MEDIUM)
+      `uvm_info(msg_id, $sformatf("Device stretch SCL %d", tc.tStretchHostClock), UVM_MEDIUM)
       wait_for_dly(tc.tStretchHostClock);
     end
     wait_for_dly(tc.tClockLow);

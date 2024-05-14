@@ -202,8 +202,14 @@ class i2c_driver extends dv_base_driver #(i2c_item, i2c_agent_cfg);
     // If Stretch value is greater than 2*tTimeOut, it will create 2 interrupt events.
     // Which can cause faluse error in 'host_stretch_testmode'.
     // So, this value should be associated with tTimeout in host stretch testmode
-    if (cfg.host_stretch_test_mode) return (tc.tTimeOut + 1);
-    else return $urandom_range(tc.tClockPulse, tc.tClockPulse + 2*tc.tTimeOut);
+    if (cfg.host_stretch_test_mode) begin
+      return (tc.tTimeOut + 1);
+    end else if (tc.timeOutMode == TimeOutModeBus) begin
+      // The stretch timeout isn't active, so stretch for some small range.
+      return $urandom_range(0, tc.tClockLow + tc.tClockPulse);
+    end else begin
+      return $urandom_range(tc.tClockPulse, 2*tc.tTimeOut);
+    end
   endfunction : gen_num_stretch_host_clks
 
   virtual task process_reset();

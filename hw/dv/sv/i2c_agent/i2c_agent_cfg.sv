@@ -75,7 +75,7 @@ class i2c_agent_cfg extends dv_base_agent_cfg;
     `uvm_field_int(timing_cfg.tSetupStop,                     UVM_DEFAULT)
     `uvm_field_int(timing_cfg.tHoldStop,                      UVM_DEFAULT)
     `uvm_field_int(timing_cfg.tTimeOut,                       UVM_DEFAULT)
-    `uvm_field_int(timing_cfg.enbTimeOut,                     UVM_DEFAULT)
+    `uvm_field_enum(i2c_timeout_mode_e, timing_cfg.timeOutMode, UVM_DEFAULT)
     `uvm_field_int(timing_cfg.tStretchHostClock,              UVM_DEFAULT)
     `uvm_field_int(timing_cfg.tSdaUnstable,                   UVM_DEFAULT)
     `uvm_field_int(timing_cfg.tSdaInterference,               UVM_DEFAULT)

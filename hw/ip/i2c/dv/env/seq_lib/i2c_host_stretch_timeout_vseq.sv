@@ -27,7 +27,7 @@ class i2c_host_stretch_timeout_vseq extends i2c_rx_tx_vseq;
   constraint t_timeout_c { t_timeout == 5; }
 
   // timeout is always enabled so stretch_timeout irq is aggressively asserted
-  constraint e_timeout_c { e_timeout == 1; }
+  constraint e_timeout_c { e_timeout == TimeOutModeStretch; }
 
   local uint cnt_wr_stretch;
   local uint cnt_rd_stretch;

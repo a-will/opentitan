@@ -33,6 +33,12 @@ package i2c_agent_pkg;
     DrvStop
   } drv_phase_e;
 
+  typedef enum int {
+    TimeOutModeDisabled = 0,
+    TimeOutModeBus = 1,
+    TimeOutModeStretch = 2
+  } i2c_timeout_mode_e;
+
   // register values
   typedef struct {
     // derived parameters
@@ -46,8 +52,8 @@ package i2c_agent_pkg;
     bit  [31:0]  tClockStop;
     bit  [31:0]  tSetupStop;
     bit  [31:0]  tHoldStop;
-    bit          enbTimeOut;
     bit  [30:0]  tTimeOut;
+    i2c_timeout_mode_e timeOutMode;
     uint         tStretchHostClock;
 
     // sda_unstable interrupt will be asserted if

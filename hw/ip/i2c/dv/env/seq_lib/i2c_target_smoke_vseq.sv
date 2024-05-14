@@ -10,6 +10,19 @@ class i2c_target_smoke_vseq extends i2c_base_vseq;
   typedef i2c_item item_q[$];
   item_q txn_stimulus[int];
 
+  // constraints for i2c timing registers
+  constraint t_timeout_c {
+    solve tlow, thigh, e_timeout before t_timeout;
+
+    if (e_timeout == TimeOutModeBus) {
+      // Set bus timeout to be completely inert during the long FIFO handling
+      // delays.
+      t_timeout == 28'hFFF_FFFF;
+    } else {
+      t_timeout inside {[cfg.seq_cfg.i2c_min_timing : cfg.seq_cfg.i2c_max_timing]};
+    }
+  }
+
   constraint timing_val_c {
     thigh   inside {[                         4 : cfg.seq_cfg.i2c_max_timing]};
     t_r     inside {[cfg.seq_cfg.i2c_min_timing : cfg.seq_cfg.i2c_max_timing]};
