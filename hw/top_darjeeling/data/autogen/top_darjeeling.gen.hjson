@@ -15348,6 +15348,621 @@
         ]
       }
     }
+    {
+      name: vitis
+      pinout:
+      {
+        remove_ports:
+        [
+          POR_N
+          JTAG_TCK
+          JTAG_TMS
+          JTAG_TDI
+          JTAG_TDO
+          JTAG_TRST_N
+          SPI_HOST_D0
+          SPI_HOST_D1
+          SPI_HOST_D2
+          SPI_HOST_D3
+          SPI_HOST_CLK
+          SPI_HOST_CS_L
+          SPI_DEV_D0
+          SPI_DEV_D1
+          SPI_DEV_D2
+          SPI_DEV_D3
+          SPI_DEV_CLK
+          SPI_DEV_CS_L
+          SPI_DEV_TPM_CS_L
+          UART_RX
+          UART_TX
+          I2C_SCL
+          I2C_SDA
+          GPIO0
+          GPIO1
+          GPIO2
+          GPIO3
+          GPIO4
+          GPIO5
+          GPIO6
+          GPIO7
+          GPIO8
+          GPIO9
+          GPIO10
+          GPIO11
+          GPIO12
+          GPIO13
+          GPIO14
+          GPIO15
+          GPIO16
+          GPIO17
+          GPIO18
+          GPIO19
+          GPIO20
+          GPIO21
+          GPIO22
+          GPIO23
+          GPIO24
+          GPIO25
+          GPIO26
+          GPIO27
+          GPIO28
+          GPIO29
+          GPIO30
+          GPIO31
+          SOC_GPI0
+          SOC_GPI1
+          SOC_GPI2
+          SOC_GPI3
+          SOC_GPI4
+          SOC_GPI5
+          SOC_GPI6
+          SOC_GPI7
+          SOC_GPI8
+          SOC_GPI9
+          SOC_GPI10
+          SOC_GPI11
+          SOC_GPO0
+          SOC_GPO1
+          SOC_GPO2
+          SOC_GPO3
+          SOC_GPO4
+          SOC_GPO5
+          SOC_GPO6
+          SOC_GPO7
+          SOC_GPO8
+          SOC_GPO9
+          SOC_GPO10
+          SOC_GPO11
+          MIO0
+          MIO1
+          MIO2
+          MIO3
+          MIO4
+          MIO5
+          MIO6
+          MIO7
+          MIO8
+          MIO9
+          MIO10
+          MIO11
+        ]
+        remove_pads:
+        [
+          OTP_EXT_VOLT
+        ]
+        add_pads:
+        [
+          {
+            name: S_AXI_CONTROL_ACLK
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_ARESETN
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_ARADDR
+            port_type: input  [31:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_ARREADY
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_ARVALID
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_AWADDR
+            port_type: input  [31:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_AWREADY
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_AWVALID
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_BREADY
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_BRESP
+            port_type: "output [1:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_BVALID
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_RDATA
+            port_type: output [31:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_RREADY
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_RRESP
+            port_type: "output [1:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_RVALID
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_WDATA
+            port_type: input  [31:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_WLAST
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_WREADY
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_WSTRB
+            port_type: "input  [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: S_AXI_CONTROL_WVALID
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: INTERRUPT_O
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARADDR
+            port_type: output [35:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARBURST
+            port_type: "output [1:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARCACHE
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARLEN
+            port_type: "output [7:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARLOCK
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARPROT
+            port_type: "output [2:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARQOS
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARREADY
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARREGION
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARSIZE
+            port_type: "output [2:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_ARVALID
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWADDR
+            port_type: output [35:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWBURST
+            port_type: "output [1:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWCACHE
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWLEN
+            port_type: "output [7:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWLOCK
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWPROT
+            port_type: "output [2:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWQOS
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWREADY
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWREGION
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWSIZE
+            port_type: "output [2:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_AWVALID
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_BREADY
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_BRESP
+            port_type: "input  [1:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_BVALID
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_RDATA
+            port_type: input  [31:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_RLAST
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_RREADY
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_RRESP
+            port_type: "input  [1:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_RVALID
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_WDATA
+            port_type: output [31:0]
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_WLAST
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_WREADY
+            port_type: "input        "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_WSTRB
+            port_type: "output [3:0] "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+          {
+            name: M_AXI_SHMEM_WVALID
+            port_type: "output       "
+            type: InputStd
+            bank: VIO
+            connection: manual
+            desc: ""
+          }
+        ]
+      }
+      pinmux:
+      {
+        special_signals:
+        [
+          {
+            name: tap0
+            pad: MIO0
+            desc: TAP strap signal.
+            idx: 0
+          }
+          {
+            name: tap1
+            pad: MIO1
+            desc: TAP strap signal.
+            idx: 1
+          }
+          {
+            name: dft0
+            pad: MIO2
+            desc: DFT strap signal.
+            idx: 2
+          }
+          {
+            name: dft1
+            pad: MIO3
+            desc: DFT strap signal.
+            idx: 3
+          }
+          {
+            name: tck
+            pad: MIO4
+            desc: JTAG tck signal.
+            idx: 4
+          }
+          {
+            name: tms
+            pad: MIO5
+            desc: JTAG tms signal.
+            idx: 5
+          }
+          {
+            name: trst_n
+            pad: MIO6
+            desc: JTAG trst_n signal.
+            idx: 6
+          }
+          {
+            name: tdi
+            pad: MIO7
+            desc: JTAG tdi signal.
+            idx: 7
+          }
+          {
+            name: tdo
+            pad: MIO8
+            desc: JTAG tdo signal.
+            idx: 8
+          }
+        ]
+      }
+    }
   ]
   exported_clks: {}
   wakeups:

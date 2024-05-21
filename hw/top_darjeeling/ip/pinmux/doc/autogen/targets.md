@@ -9,3 +9,4 @@ util/topgen.py -t hw/top_darjeeling/data/top_darjeeling.hjson -o hw/top_darjeeli
 |:-------------:|:-----------:|:-------------:|:--------------:|:--------------:|:-------------:|:-------------------------------------------------------------------------------------:|
 |     ASIC      |      1      |      12       |       73       |       7        |      92       | [Pinout Table](../../../top_darjeeling/ip/pinmux/doc/autogen/pinout_asic/index.html)  |
 |     CW310     |      1      |      12       |       73       |       10       |      95       | [Pinout Table](../../../top_darjeeling/ip/pinmux/doc/autogen/pinout_cw310/index.html) |
+|     VITIS     |      1      |       0       |       0        |       56       |      56       | [Pinout Table](../../../top_darjeeling/ip/pinmux/doc/autogen/pinout_vitis/index.html) |
