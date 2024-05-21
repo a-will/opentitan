@@ -109,7 +109,7 @@ module chip_darjeeling_asic #(
   inout MIO8, // MIO Pad 8
   inout MIO9, // MIO Pad 9
   inout MIO10, // MIO Pad 10
-  inout MIO11  // MIO Pad 11
+  inout MIO11 // MIO Pad 11
 );
 
   import top_darjeeling_pkg::*;

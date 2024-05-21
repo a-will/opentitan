@@ -66,6 +66,13 @@ cpu_clk = top['clocks'].hier_paths['top'] + "clk_proc_main"
 
 unused_im_defs, undriven_im_defs = lib.get_dangling_im_def(top["inter_signal"]["definitions"])
 
+last_port = None
+end_port_list = False
+for pad in dedicated_pads + muxed_pads:
+  if pad["name"] not in target["pinout"]["remove_ports"]:
+    last_port = pad["name"]
+if last_port is None:
+  end_port_list = True
 %>\
 
 % if target["name"] != "asic":
@@ -103,8 +110,14 @@ module chip_${top["name"]}_${target["name"]} #(
     comment = "// Dedicated Pad for {}".format(sig["name"])
   else:
     comment = "// Manual Pad"
+  if pad["name"] == last_port:
+    end_port_list = True
+  if end_port_list:
+    port_terminator = ''
+  else:
+    port_terminator = ','
 %>\
-  ${port_comment}${pad["port_type"]} ${pad["name"]}, ${comment}
+  ${port_comment}${pad["port_type"]} ${pad["name"]}${port_terminator} ${comment}
 % endfor
 
   // Muxed Pads
@@ -115,8 +128,14 @@ module chip_${top["name"]}_${target["name"]} #(
     removed_port_names.append(pad["name"])
   else:
     port_comment = ""
+  if pad["name"] == last_port:
+    end_port_list = True
+  if end_port_list:
+    port_terminator = ''
+  else:
+    port_terminator = ','
 %>\
-  ${port_comment}${pad["port_type"]} ${pad["name"]}${" " if loop.last else ","} // MIO Pad ${pad["idx"]}
+  ${port_comment}${pad["port_type"]} ${pad["name"]}${port_terminator} // MIO Pad ${pad["idx"]}
 % endfor
 );
 

@@ -87,7 +87,7 @@ module chip_earlgrey_asic #(
   inout IOR10, // MIO Pad 43
   inout IOR11, // MIO Pad 44
   inout IOR12, // MIO Pad 45
-  inout IOR13  // MIO Pad 46
+  inout IOR13 // MIO Pad 46
 );
 
   import top_earlgrey_pkg::*;
