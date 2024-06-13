@@ -48,16 +48,16 @@ class TestBitstreamCache(unittest.TestCase):
                         "build_id": "abcd",
                         "bitstream": {
                             "file": BITSTREAM_ORIG,
-                            "build_target": "//hw/bitstream/vivado:fpga_cw310",
+                            "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310",
                         },
                         "memory_map_info": {
                             "otp": {
                                 "file": "otp.mmi",
-                                "build_target": "//hw/bitstream/vivado:fpga_cw310",
+                                "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310",
                             },
                             "rom": {
                                 "file": "rom.mmi",
-                                "build_target": "//hw/bitstream/vivado:fpga_cw310",
+                                "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310",
                             },
                         },
                     },
@@ -122,32 +122,32 @@ filegroup(
 
 alias(
     name = "chip_earlgrey_cw310_hyperdebug_bitstream",
-    actual = "@//hw/bitstream/vivado:fpga_cw310_test_rom_hyp",
+    actual = "@//hw/top_earlgrey/bitstream/vivado:fpga_cw310_test_rom_hyp",
 )
 
 alias(
     name = "chip_earlgrey_cw310_hyperdebug_rom_mmi",
-    actual = "@//hw/bitstream/vivado:rom_mmi_hyp",
+    actual = "@//hw/top_earlgrey/bitstream/vivado:rom_mmi_hyp",
 )
 
 alias(
     name = "chip_earlgrey_cw310_hyperdebug_otp_mmi",
-    actual = "@//hw/bitstream/vivado:otp_mmi_hyp",
+    actual = "@//hw/top_earlgrey/bitstream/vivado:otp_mmi_hyp",
 )
 
 alias(
     name = "chip_earlgrey_cw340_bitstream",
-    actual = "@//hw/bitstream/vivado:fpga_cw340_test_rom",
+    actual = "@//hw/top_earlgrey/bitstream/vivado:fpga_cw340_test_rom",
 )
 
 alias(
     name = "chip_earlgrey_cw340_rom_mmi",
-    actual = "@//hw/bitstream/vivado:fpga_cw340_rom_mmi",
+    actual = "@//hw/top_earlgrey/bitstream/vivado:fpga_cw340_rom_mmi",
 )
 
 alias(
     name = "chip_earlgrey_cw340_otp_mmi",
-    actual = "@//hw/bitstream/vivado:fpga_cw340_otp_mmi",
+    actual = "@//hw/top_earlgrey/bitstream/vivado:fpga_cw340_otp_mmi",
 )
 ''')
 

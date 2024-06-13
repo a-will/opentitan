@@ -168,12 +168,12 @@ opentitan_binary(
             lc_state,
             t["name"],
         ),
-        src = "//hw/bitstream:mask_rom",
+        src = "//hw/top_earlgrey/bitstream:mask_rom",
         data = ":otp_img_sigverify_spx_{}_{}".format(
             lc_state,
             t["name"],
         ),
-        meminfo = "//hw/bitstream:otp_mmi",
+        meminfo = "//hw/top_earlgrey/bitstream:otp_mmi",
         update_usr_access = True,
         visibility = ["//visibility:private"],
     )

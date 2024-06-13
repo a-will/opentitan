@@ -23,9 +23,9 @@ def _opentitan_transition_impl(settings, attr):
         "//command_line_option:platforms": attr.platform,
         "//command_line_option:copt": settings["//command_line_option:copt"],
         "//command_line_option:features": settings["//command_line_option:features"],
-        "//hw/bitstream/universal:rom": "//hw/bitstream/universal:none",
-        "//hw/bitstream/universal:otp": "//hw/bitstream/universal:none",
-        "//hw/bitstream/universal:env": "//hw/bitstream/universal:none",
+        "//hw/top_earlgrey/bitstream/universal:rom": "//hw/top_earlgrey/bitstream/universal:none",
+        "//hw/top_earlgrey/bitstream/universal:otp": "//hw/top_earlgrey/bitstream/universal:none",
+        "//hw/top_earlgrey/bitstream/universal:env": "//hw/top_earlgrey/bitstream/universal:none",
     }
 
 opentitan_transition = transition(
@@ -43,9 +43,9 @@ opentitan_transition = transition(
         "//command_line_option:platforms",
         "//command_line_option:copt",
         "//command_line_option:features",
-        "//hw/bitstream/universal:rom",
-        "//hw/bitstream/universal:otp",
-        "//hw/bitstream/universal:env",
+        "//hw/top_earlgrey/bitstream/universal:rom",
+        "//hw/top_earlgrey/bitstream/universal:otp",
+        "//hw/top_earlgrey/bitstream/universal:env",
     ],
 )
 

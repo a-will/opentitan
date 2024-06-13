@@ -15,10 +15,10 @@ package(default_visibility = ["//visibility:public"])
 # The readmem directives in the fusesoc-ized build tree will be in the subdir
 # ${build_root}/src/lowrisc_prim_util_memload_0/rtl/prim_util_memload.svh,
 # and ${build_root} will be a subdirectory called `build.fpga_cw310` inside of
-# bazel-out/k8-{configname}/bin/hw/bitstream/vivado.
+# bazel-out/k8-{configname}/bin/hw/top_earlgrey/bitstream/vivado.
 # Therefore, the relative path between prim_util_memload.svh and the project-root
 # relative $(location ...) resolved labels is up 10 subdirectories.
-_PREFIX = "../../../../../../../../../.."
+_PREFIX = "../../../../../../../../../../.."
 
 _CW310_TESTROM = "//sw/device/lib/testing/test_rom:test_rom_fpga_cw310_scr_vmem"
 
@@ -202,7 +202,7 @@ pkg_tar(
     srcs = [":earlgrey_cw310_manifest"],
     mode = "0444",
     package_dir = "build-bin/hw/top_earlgrey/chip_earlgrey_cw310",
-    strip_prefix = "/hw/bitstream/vivado/earlgrey_cw310_manifest",
+    strip_prefix = "/hw/top_earlgrey/bitstream/vivado/earlgrey_cw310_manifest",
     tags = ["manual"],
 )
 
@@ -225,7 +225,7 @@ pkg_tar(
     srcs = [":earlgrey_cw310_hyperdebug_manifest"],
     mode = "0444",
     package_dir = "build-bin/hw/top_earlgrey/chip_earlgrey_cw310_hyperdebug",
-    strip_prefix = "/hw/bitstream/vivado/earlgrey_cw310_hyperdebug_manifest",
+    strip_prefix = "/hw/top_earlgrey/bitstream/vivado/earlgrey_cw310_hyperdebug_manifest",
     tags = ["manual"],
 )
 
@@ -248,7 +248,7 @@ pkg_tar(
     srcs = [":earlgrey_cw340_manifest"],
     mode = "0444",
     package_dir = "build-bin/hw/top_earlgrey/chip_earlgrey_cw340",
-    strip_prefix = "/hw/bitstream/vivado/earlgrey_cw340_manifest",
+    strip_prefix = "/hw/top_earlgrey/bitstream/vivado/earlgrey_cw340_manifest",
     tags = ["manual"],
 )
 

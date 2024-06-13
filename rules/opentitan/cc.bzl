@@ -347,21 +347,21 @@ opentitan_binary = rv_rule(
 )
 
 def _testing_bitstream_impl(settings, attr):
-    rom = attr.rom if attr.rom else "//hw/bitstream/universal:none"
-    otp = attr.otp if attr.otp else "//hw/bitstream/universal:none"
+    rom = attr.rom if attr.rom else "//hw/top_earlgrey/bitstream/universal:none"
+    otp = attr.otp if attr.otp else "//hw/top_earlgrey/bitstream/universal:none"
     return {
-        "//hw/bitstream/universal:rom": rom,
-        "//hw/bitstream/universal:otp": otp,
-        "//hw/bitstream/universal:env": attr.exec_env,
+        "//hw/top_earlgrey/bitstream/universal:rom": rom,
+        "//hw/top_earlgrey/bitstream/universal:otp": otp,
+        "//hw/top_earlgrey/bitstream/universal:env": attr.exec_env,
     }
 
 _testing_bitstream = transition(
     implementation = _testing_bitstream_impl,
     inputs = [],
     outputs = [
-        "//hw/bitstream/universal:rom",
-        "//hw/bitstream/universal:otp",
-        "//hw/bitstream/universal:env",
+        "//hw/top_earlgrey/bitstream/universal:rom",
+        "//hw/top_earlgrey/bitstream/universal:otp",
+        "//hw/top_earlgrey/bitstream/universal:env",
     ],
 )
 

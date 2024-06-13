@@ -152,7 +152,7 @@ opentitan_test(
             ":sram_cp_provision": "sram_cp_provision",
             ":sram_cp_provision_functest": "sram_cp_provision_functest",
         },
-        bitstream = "//hw/bitstream:mask_rom_otp_raw",
+        bitstream = "//hw/top_earlgrey/bitstream:mask_rom_otp_raw",
         changes_otp = True,
         needs_jtag = True,
         tags = ["manuf"],

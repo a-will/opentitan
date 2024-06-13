@@ -35,7 +35,7 @@ manifest(d = {
 # with the OTP word CREATOR_SW_CCFG_MANUF_STATE set to `SIVAL` (as above
 # in the manifest definition).  You can manually create such a bitstream with:
 #
-# bazel build //hw/bitstream/universal:splice --//hw/bitstream/universal:env=//hw/top_earlgrey:fpga_cw310_sival
+# bazel build //hw/top_earlgrey/bitstream/universal:splice --//hw/top_earlgrey/bitstream/universal:env=//hw/top_earlgrey:fpga_cw310_sival
 opentitan_binary(
     name = "rom_ext_fake_prod_signed_slot_a",
     ecdsa_key = {"//sw/device/silicon_creator/rom/keys/fake/ecdsa:prod_key_0_ecdsa_p256": "prod_key_0"},

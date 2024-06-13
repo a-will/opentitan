@@ -38,19 +38,19 @@ MANIFESTS_DIR = os.path.dirname(__file__) if __file__ else os.path.dirname(sys.a
 # Required designs
 KNOWN_DESIGNS = {
     "chip_earlgrey_cw310": {
-        "bitstream": "@//hw/bitstream/vivado:fpga_cw310_test_rom",
-        "rom_mmi": "@//hw/bitstream/vivado:rom_mmi",
-        "otp_mmi": "@//hw/bitstream/vivado:otp_mmi",
+        "bitstream": "@//hw/top_earlgrey/bitstream/vivado:fpga_cw310_test_rom",
+        "rom_mmi": "@//hw/top_earlgrey/bitstream/vivado:rom_mmi",
+        "otp_mmi": "@//hw/top_earlgrey/bitstream/vivado:otp_mmi",
     },
     "chip_earlgrey_cw310_hyperdebug": {
-        "bitstream": "@//hw/bitstream/vivado:fpga_cw310_test_rom_hyp",
-        "rom_mmi": "@//hw/bitstream/vivado:rom_mmi_hyp",
-        "otp_mmi": "@//hw/bitstream/vivado:otp_mmi_hyp",
+        "bitstream": "@//hw/top_earlgrey/bitstream/vivado:fpga_cw310_test_rom_hyp",
+        "rom_mmi": "@//hw/top_earlgrey/bitstream/vivado:rom_mmi_hyp",
+        "otp_mmi": "@//hw/top_earlgrey/bitstream/vivado:otp_mmi_hyp",
     },
     "chip_earlgrey_cw340": {
-        "bitstream": "@//hw/bitstream/vivado:fpga_cw340_test_rom",
-        "rom_mmi": "@//hw/bitstream/vivado:fpga_cw340_rom_mmi",
-        "otp_mmi": "@//hw/bitstream/vivado:fpga_cw340_otp_mmi",
+        "bitstream": "@//hw/top_earlgrey/bitstream/vivado:fpga_cw340_test_rom",
+        "rom_mmi": "@//hw/top_earlgrey/bitstream/vivado:fpga_cw340_rom_mmi",
+        "otp_mmi": "@//hw/top_earlgrey/bitstream/vivado:fpga_cw340_otp_mmi",
     },
 }
 
@@ -292,16 +292,16 @@ class BitstreamCache(object):
                 "build_id": key,
                 "bitstream": {
                     "file": "lowrisc_systems_chip_earlgrey_cw310_0.1.bit.orig",
-                    "build_target": "//hw/bitstream/vivado:fpga_cw310",
+                    "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310",
                 },
                 "memory_map_info": {
                     "otp": {
                         "file": "otp.mmi",
-                        "build_target": "//hw/bitstream/vivado:fpga_cw310",
+                        "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310",
                     },
                     "rom": {
                         "file": "rom.mmi",
-                        "build_target": "//hw/bitstream/vivado:fpga_cw310",
+                        "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310",
                     },
                 },
             },
@@ -310,16 +310,16 @@ class BitstreamCache(object):
                 "bitstream": {
                     "file": "chip_earlgrey_cw310_hyperdebug/"
                             "lowrisc_systems_chip_earlgrey_cw310_hyperdebug_0.1.bit",
-                    "build_target": "//hw/bitstream/vivado:fpga_cw310_hyperdebug",
+                    "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310_hyperdebug",
                 },
                 "memory_map_info": {
                     "otp": {
                         "file": "chip_earlgrey_cw310_hyperdebug/otp.mmi",
-                        "build_target": "//hw/bitstream/vivado:fpga_cw310_hyperdebug",
+                        "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310_hyperdebug",
                     },
                     "rom": {
                         "file": "chip_earlgrey_cw310_hyperdebug/rom.mmi",
-                        "build_target": "//hw/bitstream/vivado:fpga_cw310_hyperdebug",
+                        "build_target": "//hw/top_earlgrey/bitstream/vivado:fpga_cw310_hyperdebug",
                     },
                 },
             },

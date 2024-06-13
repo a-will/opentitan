@@ -61,8 +61,8 @@ filegroup(
     name = "bitstream",
     testonly = True,
     srcs = select({
-        "bitstream_skip": ["//hw/bitstream/universal:none"],
-        "bitstream_vivado": ["//hw/bitstream/vivado:fpga_cw310_test_rom"],
+        "bitstream_skip": ["//hw/top_earlgrey/bitstream/universal:none"],
+        "bitstream_vivado": ["//hw/top_earlgrey/bitstream/vivado:fpga_cw310_test_rom"],
         "bitstream_gcp_splice": ["@bitstreams//:chip_earlgrey_cw310_bitstream"],
         "//conditions:default": ["@bitstreams//:chip_earlgrey_cw310_bitstream"],
     }),
@@ -73,8 +73,8 @@ filegroup(
     name = "rom_mmi",
     testonly = True,
     srcs = select({
-        "bitstream_skip": ["//hw/bitstream/universal:none"],
-        "bitstream_vivado": ["//hw/bitstream/vivado:rom_mmi"],
+        "bitstream_skip": ["//hw/top_earlgrey/bitstream/universal:none"],
+        "bitstream_vivado": ["//hw/top_earlgrey/bitstream/vivado:rom_mmi"],
         "bitstream_gcp_splice": ["@bitstreams//:chip_earlgrey_cw310_rom_mmi"],
         "//conditions:default": ["@bitstreams//:chip_earlgrey_cw310_rom_mmi"],
     }),
@@ -85,8 +85,8 @@ filegroup(
     name = "otp_mmi",
     testonly = True,
     srcs = select({
-        "bitstream_skip": ["//hw/bitstream/universal:none"],
-        "bitstream_vivado": ["//hw/bitstream/vivado:otp_mmi"],
+        "bitstream_skip": ["//hw/top_earlgrey/bitstream/universal:none"],
+        "bitstream_vivado": ["//hw/top_earlgrey/bitstream/vivado:otp_mmi"],
         "bitstream_gcp_splice": ["@bitstreams//:chip_earlgrey_cw310_otp_mmi"],
         "//conditions:default": ["@bitstreams//:chip_earlgrey_cw310_otp_mmi"],
     }),
@@ -147,7 +147,7 @@ pkg_tar(
     srcs = [":chip_earlgrey_cw310_cached_fragment"],
     mode = "0444",
     package_dir = "build-bin/hw/top_earlgrey/chip_earlgrey_cw310",
-    strip_prefix = "/hw/bitstream/chip_earlgrey_cw310_cached_fragment",
+    strip_prefix = "/hw/top_earlgrey/bitstream/chip_earlgrey_cw310_cached_fragment",
     tags = ["manual"],
 )
 
@@ -169,7 +169,7 @@ pkg_tar(
     srcs = [":chip_earlgrey_cw310_hyperdebug_cached_fragment"],
     mode = "0444",
     package_dir = "build-bin/hw/top_earlgrey/chip_earlgrey_cw310_hyperdebug",
-    strip_prefix = "/hw/bitstream/chip_earlgrey_cw310_hyperdebug_cached_fragment",
+    strip_prefix = "/hw/top_earlgrey/bitstream/chip_earlgrey_cw310_hyperdebug_cached_fragment",
     tags = ["manual"],
 )
 
@@ -191,7 +191,7 @@ pkg_tar(
     srcs = [":chip_earlgrey_cw340_cached_fragment"],
     mode = "0444",
     package_dir = "build-bin/hw/top_earlgrey/chip_earlgrey_cw340",
-    strip_prefix = "/hw/bitstream/chip_earlgrey_cw340_cached_fragment",
+    strip_prefix = "/hw/top_earlgrey/bitstream/chip_earlgrey_cw340_cached_fragment",
     tags = ["manual"],
 )
 

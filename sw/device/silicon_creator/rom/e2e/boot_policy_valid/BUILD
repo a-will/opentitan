@@ -61,9 +61,9 @@ BOOT_POLICY_VALID_CASES = [
 [
     bitstream_splice(
         name = "bitstream_boot_policy_valid_{}".format(lc_state),
-        src = "//hw/bitstream:mask_rom",
+        src = "//hw/top_earlgrey/bitstream:mask_rom",
         data = ":otp_img_boot_policy_valid_{}".format(lc_state),
-        meminfo = "//hw/bitstream:otp_mmi",
+        meminfo = "//hw/top_earlgrey/bitstream:otp_mmi",
         update_usr_access = True,
     )
     for lc_state, _ in get_lc_items()

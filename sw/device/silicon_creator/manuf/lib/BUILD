@@ -146,7 +146,7 @@ opentitan_test(
         "//hw/top_earlgrey:fpga_cw310_rom_with_fake_keys": None,
     },
     fpga = fpga_params(
-        bitstream = "//hw/bitstream:mask_rom_otp_test_unlocked1_initial",
+        bitstream = "//hw/top_earlgrey/bitstream:mask_rom_otp_test_unlocked1_initial",
         tags = ["manuf"],
     ),
     deps = [
@@ -207,7 +207,7 @@ opentitan_test(
         "//hw/top_earlgrey:fpga_cw310_rom_with_fake_keys": None,
     },
     fpga = fpga_params(
-        bitstream = "//hw/bitstream:mask_rom_otp_test_unlocked1",
+        bitstream = "//hw/top_earlgrey/bitstream:mask_rom_otp_test_unlocked1",
         changes_otp = True,
         tags = ["manuf"],
         test_cmd = """

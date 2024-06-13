@@ -11,9 +11,9 @@ load("@nonhermetic//:env.bzl", "ENV")
 # Rules for memory splicing with Vivado.
 
 DEFAULTS = struct(
-    rom = "//hw/bitstream/universal:none",
-    otp = "//hw/bitstream/universal:none",
-    env = "//hw/bitstream/universal:none",
+    rom = "//hw/top_earlgrey/bitstream/universal:none",
+    otp = "//hw/top_earlgrey/bitstream/universal:none",
+    env = "//hw/top_earlgrey/bitstream/universal:none",
 )
 
 def gen_vivado_mem_file(ctx, name, src, tool, swap_nibbles = True):
@@ -183,7 +183,7 @@ bitstream_splice_ = rule(
 def bitstream_splice(**kwargs):
     bitstream_splice_(
         skip = select({
-            "//hw/bitstream:bitstream_skip": True,
+            "//hw/top_earlgrey/bitstream:bitstream_skip": True,
             "//conditions:default": False,
         }),
         **kwargs

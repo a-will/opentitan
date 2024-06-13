@@ -401,12 +401,12 @@ def opentitan_functest(
             # the target. Otherwise, use the provided bitstream argument.
             _DEFAULT_BITSTREAM_PATH = {
                 "cw310": {
-                    "cw310": "@//hw/bitstream",
-                    "hyper310": "@//hw/bitstream/hyperdebug",
+                    "cw310": "@//hw/top_earlgrey/bitstream",
+                    "hyper310": "@//hw/top_earlgrey/bitstream/hyperdebug",
                 },
                 "cw340": {
-                    "cw340": "@//hw/bitstream/cw340",
-                    "hyper340": "@//hw/bitstream/cw340",
+                    "cw340": "@//hw/top_earlgrey/bitstream/cw340",
+                    "hyper340": "@//hw/top_earlgrey/bitstream/cw340",
                 },
             }
             if params.get("bitstream") == None:

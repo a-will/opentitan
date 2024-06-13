@@ -216,7 +216,7 @@ bazel test --define DISABLE_VERILATOR_BUILD=true       \
 ## Read More
 
 *  [Build & Test Rules](../../../../../rules/opentitan/README.md)
-*  [FPGA Bitstreams](../../../../../hw/bitstream/README.md)
+*  [FPGA Bitstreams](../../../../../hw/top_earlgrey/bitstream/README.md)
 *  [On-Device Test Framework](../../../lib/testing/test_framework/README.md)
 *  [OTP Build and Test Infrastructure](../../../../../hw/ip/otp_ctrl/data/README.md)
 *  [ROM\_EXT for Silicon Validation](../../../silicon_creator/rom_ext/doc/si_val.md)

@@ -31,7 +31,7 @@ steps:
 - bash: |
     set -ex
     . util/build_consts.sh
-    bazel_package="//hw/bitstream"
+    bazel_package="//hw/top_${{ parameters.top_name }}/bitstream"
     design_name=chip_${{ parameters.top_name }}_${{ parameters.design_suffix }}
     cached_archive="${bazel_package}:${design_name}_cached_archive"
     ci/bazelisk.sh build "${cached_archive}"
@@ -41,7 +41,7 @@ steps:
   displayName: Extract cached bitstream
 - bash: |
     set -ex
-    bazel_package=//hw/bitstream/vivado
+    bazel_package=//hw/top_${{ parameters.top_name }}/bitstream/vivado
     bitstream_target=${bazel_package}:fpga_${{ parameters.design_suffix }}
     archive_target=${bazel_package}:${{ parameters.top_name }}_${{ parameters.design_suffix }}_archive
     trap 'get_logs' EXIT

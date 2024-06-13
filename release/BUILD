@@ -12,8 +12,8 @@ pkg_tar(
     testonly = True,
     srcs = [
         "//hw:package",
-        "//hw/bitstream:package",
-        "//hw/bitstream/vivado:package",
+        "//hw/top_earlgrey/bitstream:package",
+        "//hw/top_earlgrey/bitstream/vivado:package",
         "//hw/ip/otp_ctrl/data:package",
         "//sw/device/examples/hello_world:package",
         "//sw/device/lib/testing/test_rom:package",

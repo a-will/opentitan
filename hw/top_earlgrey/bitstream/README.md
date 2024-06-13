@@ -16,10 +16,10 @@ are **not for production use cases**.
 `life_cycle_state` maps to any of the life cycle states supported by the
 OpenTitan design.
 
-The following command shows a list of targets provided by `//hw/bitstream`:
+The following command shows a list of targets provided by `//hw/top_earlgrey/bitstream`:
 
 ```
-bazel query //hw/bitstream:*
+bazel query //hw/top_earlgrey/bitstream:*
 ```
 
 ## Overriding Defaults in `opentitan_test` Targets
@@ -77,7 +77,7 @@ opentitan_test(
     name = "individualize_sw_cfg_functest",
     srcs = ["individualize_sw_cfg_functest.c"],
     fpga = fpga_params(
-        bitstream = "//hw/bitstream:mask_rom_otp_test_unlocked0",
+        bitstream = "//hw/top_earlgrey/bitstream:mask_rom_otp_test_unlocked0",
         tags = ["manuf"],
     ),
     exec_env = {

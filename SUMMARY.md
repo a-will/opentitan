@@ -411,7 +411,7 @@
 
 - [Device Software](./sw/device/README.md)
   - [Build & Test Rules](./rules/opentitan/README.md)
-    - [FPGA Bitstreams](./hw/bitstream/README.md)
+    - [FPGA Bitstreams](./hw/top_earlgrey/bitstream/README.md)
     - [OTP Build and Test Infrastructure](./hw/ip/otp_ctrl/data/README.md)
   - [Device Libraries](./sw/device/lib/README.md)
     - [DIF Library](./sw/device/lib/dif/README.md)

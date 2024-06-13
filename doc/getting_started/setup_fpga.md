@@ -64,13 +64,13 @@ As mentioned above, we maintain two boot ROM programs, one for faster testing (_
 To build an FPGA bitstream with the _test ROM_ for the chosen board, use:
 ```sh
 cd $REPO_TOP
-./bazelisk.sh build //hw/bitstream/vivado:fpga_${BOARD}_test_rom
+./bazelisk.sh build //hw/top_earlgrey/bitstream/vivado:fpga_${BOARD}_test_rom
 ```
 
 To build an FPGA bitstream with the _ROM_ for the chosen board, use:
 ```sh
 cd $REPO_TOP
-./bazelisk.sh build //hw/bitstream/vivado:fpga_${BOARD}_rom_with_fake_keys
+./bazelisk.sh build //hw/top_earlgrey/bitstream/vivado:fpga_${BOARD}_rom_with_fake_keys
 ```
 
 >**Note**: Building these bitstreams will require Vivado be installed on your system, with access to the proper licenses, described [here](./install_vivado/README.md).
@@ -258,7 +258,7 @@ cd $REPO_TOP
 **if you built the bitstream yourself:**
 ```sh
 cd $REPO_TOP
-./bazelisk.sh run //sw/host/opentitantool -- fpga load-bitstream $(ci/scripts/target-location.sh //hw/bitstream/vivado:fpga_${BOARD}_rom_with_fake_keys)
+./bazelisk.sh run //sw/host/opentitantool -- fpga load-bitstream $(ci/scripts/target-location.sh //hw/top_earlgrey/bitstream/vivado:fpga_${BOARD}_rom_with_fake_keys)
 ```
 
 Depending on the FPGA device, the flashing itself may take several seconds.

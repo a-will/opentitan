@@ -85,9 +85,9 @@ otp_image(
 
 bitstream_splice(
     name = "bitstream_default_otp",
-    src = "//hw/bitstream:mask_rom",
+    src = "//hw/top_earlgrey/bitstream:mask_rom",
     data = ":otp_img_default",
-    meminfo = "//hw/bitstream:otp_mmi",
+    meminfo = "//hw/top_earlgrey/bitstream:otp_mmi",
     tags = maybe_skip_in_ci(CONST.LCV.RMA),
     update_usr_access = True,
     visibility = ["//visibility:private"],
