@@ -249,6 +249,29 @@ reset_connection_required = {
 reset_connection_optional = {}
 reset_connection_added = {}
 
+addr_spaces_required = {
+    'name': ['s', 'name of the address space'],
+}
+
+addr_spaces_optional = {
+    'desc': ['s', 'address space description'],
+    'subspaces': ['l', 'list of subspace objects'],
+    'nodes': ['g', 'dict of address assignments not part of a subspace'],
+}
+
+addr_spaces_added = {}
+
+subspace_required = {
+    'name': ['s', 'name of the subspace'],
+    'nodes': ['g', 'dict of address assignments, mapping an instance to an '
+                   'address'],
+}
+
+subspace_optional = {
+    'desc': ['s', 'subspace description'],
+}
+
+subspace_added = {}
 
 # Supported PAD types.
 # Needs to coincide with enum definition in prim_pad_wrapper_pkg.sv
@@ -831,6 +854,98 @@ def check_power_domains(top):
                 raise ValueError(f"{end_point['name']} defined invalid domain {d}")
 
 
+def check_addr_spaces(top: Dict, prefix: str) -> int:
+    error = 0
+    # Prepare a dictionary of modules that key on the name
+    modules = {m['name']: m for m in top['module']}
+
+    for a in top['addr_spaces']:
+        addr_space_name = a.get('name', 'unnamed address space')
+        addr_space_prefix = prefix + ' Address Space ' + addr_space_name
+        error += check_keys(a, addr_space_required, addr_space_optional,
+                            addr_space_added, addr_space_prefix)
+
+        # Node should only be assigned once across entire address space
+        nodes = {}
+        if 'nodes' in a:
+            for node in a['nodes'].keys():
+                node_elements = node.split('.')
+                # FIXME: Trying to decide whether to split the node name for the nodes dict here, for use later
+                if node_elements = 
+                if node in nodes:
+                    log.error("{} has a mapping for {}, which was already "
+                              "assigned in this address space"
+                              .format(addr_space_prefix, node))
+        if 'subspaces' in a:
+            for s in a['subspaces']:
+                subspace_name = s.get('name', 'unnamed subspace')
+                subspace_prefix = addr_space_prefix + ' : ' + subspace_name
+                error += check_keys(s, subspace_required, subspace_optional,
+                                    subspace_added, subspace_prefix)
+                for node in s['nodes'].keys():
+                    if node in nodes:
+                        log.error("{} has a mapping for {}, which was already "
+                                  "assigned in this address space"
+                                  .format(subspace_prefix, node))
+                nodes.update(s['nodes'])
+        if len(nodes.keys()) == 0:
+            log.error("{} is an empty address space with no nodes"
+                      .format(address_space_prefix))
+            error += 1
+
+        for (node, address) in nodes:
+            node_elements = node.split('.')
+            modname = node_elements[0]
+            if instance_name not in modules:
+                log.error(f"{modname} refers to unknown module instance")
+                error += 1
+            m = modules[modname]
+
+            if 'memory' in m:
+                for intf, value in m['memory'].items():
+                    error += check_keys(value, memory_required,
+                                        memory_optional, memory_added,
+                                        prefix + " " + modname + " " + intf)
+
+                    # if size is not declared, there must be extra config to determine it
+                    if 'size' not in value and 'config' not in value:
+                        raise ValueError(f'{m["name"]} memory declaration has neither size '
+                                         'nor extra configuration.  Unable to determine '
+                                         'memory size')
+
+                    # make sure the memory regions correspond to the TL-UL interfaces
+                    if intf not in m['base_addrs']:
+                        raise ValueError(f'{prefix} {modname} memory region {intf} does not '
+                                         'correspond to any of the defined TL-UL interfaces')
+
+                    if 'size' not in value:
+                        mem_type = value['config'].get('type', "")
+
+                        if mem_type == "flash":
+                            check_keys(value['config'], eflash_required, eflash_optional,
+                                       eflash_added, "Eflash")
+                            flash = Flash(value['config'], m['base_addrs'][intf])
+                            value['size'] = flash.size
+                            value['config'] = flash
+                        else:
+                            raise ValueError(f'{m["name"]} memory config declaration does not have '
+                                             'a valid type')
+
+                    # make sure the linker region access attribute is valid
+                    attr = value.get('swaccess', 'unknown attribute')
+                    if attr not in ['ro', 'rw']:
+                        log.error('{} {} swaccess attribute {} of memory region {} '
+                                  'is not valid'.format(prefix, modname, attr, intf))
+                        error += 1
+      # FIXME: Get all nodes for the address space and write down their base
+      # addresses? Or maybe validate the address map later...
+      # Check memories for each node that has them (cross reference with
+      # modules). Move that check from check_modules() to here, since we must do
+      # check_modules() first, but base addresses have moved.
+        if 'base_addrs' in m and 'memory' in m:
+    return error
+
+
 def check_modules(top, prefix):
     error = 0
     for m in top['module']:
@@ -838,49 +953,6 @@ def check_modules(top, prefix):
         error += check_keys(m, module_required, module_optional, module_added,
                             prefix + " " + modname)
 
-        # these fields are mutually exclusive
-        if 'base_addr' in m and 'base_addrs' in m:
-            log.error("{} {} a module cannot define both the 'base_addr' "
-                      "and 'base_addrs' keys at the same time"
-                      .format(prefix, modname))
-            error += 1
-
-        if 'base_addrs' in m and 'memory' in m:
-            for intf, value in m['memory'].items():
-                error += check_keys(value, memory_required,
-                                    memory_optional, memory_added,
-                                    prefix + " " + modname + " " + intf)
-
-                # if size is not declared, there must be extra config to determine it
-                if 'size' not in value and 'config' not in value:
-                    raise ValueError(f'{m["name"]} memory declaration has neither size '
-                                     'nor extra configuration.  Unable to determine '
-                                     'memory size')
-
-                # make sure the memory regions correspond to the TL-UL interfaces
-                if intf not in m['base_addrs']:
-                    raise ValueError(f'{prefix} {modname} memory region {intf} does not '
-                                     'correspond to any of the defined TL-UL interfaces')
-
-                if 'size' not in value:
-                    mem_type = value['config'].get('type', "")
-
-                    if mem_type == "flash":
-                        check_keys(value['config'], eflash_required, eflash_optional,
-                                   eflash_added, "Eflash")
-                        flash = Flash(value['config'], m['base_addrs'][intf])
-                        value['size'] = flash.size
-                        value['config'] = flash
-                    else:
-                        raise ValueError(f'{m["name"]} memory config declaration does not have '
-                                         'a valid type')
-
-                # make sure the linker region access attribute is valid
-                attr = value.get('swaccess', 'unknown attribute')
-                if attr not in ['ro', 'rw']:
-                    log.error('{} {} swaccess attribute {} of memory region {} '
-                              'is not valid'.format(prefix, modname, attr, intf))
-                    error += 1
     return error
 
 
