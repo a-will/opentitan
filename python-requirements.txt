@@ -195,9 +195,8 @@ fastjsonschema==2.20.0 \
 flake8==7.1.1 \
     --hash=sha256:049d058491e228e03e67b390f311bbf88fce2dbaa8fa673e7aea87b7198b8d38 \
     --hash=sha256:597477df7860daa5aa0fdd84bf5208a043ab96b8e96ab708770ae0364dd03213
-fusesoc==2.4 \
-    --hash=sha256:6fecf1ef2e39d6ad38ddb3dc294bcfde302686e627c14359c52444129b246bb1 \
-    --hash=sha256:a9392dc0be5d1dcc54ed7b20f247bb8d5a9665c90775952cd5129e398487fa96
+fusesoc @ https://github.com/a-will/fusesoc/releases/download/2.4.1.dev0%2Ba-will/fusesoc-2.4.1.dev0.tar.gz \
+    --hash=sha256:975cd2ed12764afd603ef4f5c625a8def2535e072a912355b096658006131b45
 gitdb==4.0.10 \
     --hash=sha256:6eb990b69df4e15bad899ea868dc46572c3f75339735663b81de79b06f17eb9a \
     --hash=sha256:c286cf298426064079ed96a9e4a9d39e7f3e9bf15ba60701e95f5492f28415c7
@@ -706,9 +705,9 @@ rich==12.6.0 \
 semantic-version==2.10.0 \
     --hash=sha256:bdabb6d336998cbb378d4b9db3a4b56a1e3235701dc05ea2690d9a997ed5041c \
     --hash=sha256:de78a3b8e0feda74cabc54aab2da702113e33ac9d9eb9d2389bcf1f58b7d9177
-simplesat==0.8.2 \
-    --hash=sha256:1943f32735b03b048e20953a0145b2b61d2eb7a9dcc471a74f214afe9fa8d858 \
-    --hash=sha256:76dd637db54c998badb988baafbc2bd4cc6689364580588487bc2634a6ab55fd
+simplesat==0.9.1 \
+    --hash=sha256:4f7d7a121ba13db987ea635205db8897d7d01220962e8a9c8cfd41b9886e6b8a \
+    --hash=sha256:990115b1bb32a76c30b2416f645e99e61360382c795203e25ab59b26cd173749
 siphash==0.0.1 \
     --hash=sha256:aee97fe95e09a2995819c058a5e4ac6d96661a898d7fe0ad55e3b72c9a31d461
 six==1.16.0 \
