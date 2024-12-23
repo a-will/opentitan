@@ -11,7 +11,7 @@ virtual:
 filesets:
   files_rtl:
     files:
-      - rtl/prim_legacy_pkg.sv
+      - rtl/prim_pkg.sv
     file_type: systemVerilogSource
 
 targets:
