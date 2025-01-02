@@ -51,8 +51,8 @@ class rstmgr_base_vseq extends cip_base_vseq #(
 
   bit                    reset_once;
 
-  rand cpu_crash_dump_t  cpu_dump;
-  rand alert_crashdump_t alert_dump;
+  rand cpu_crash_dump_t        cpu_dump;
+  rand linearized_alert_dump_t alert_dump;
 
   rand rstreqs_t         rstreqs;
 
@@ -197,33 +197,32 @@ class rstmgr_base_vseq extends cip_base_vseq #(
 
   endtask
 
-  local function void set_alert_dump_info(alert_crashdump_t alert_dump);
+  local function void set_alert_dump_info(linearized_alert_dump_t alert_dump);
     `uvm_info(`gfn, $sformatf(
-              "Setting alert_dump_i to 0x%x", linearized_alert_dump_t'({>>{alert_dump}})),
+              "Setting alert_dump_i to 0x%x", alert_dump),
               UVM_MEDIUM)
     cfg.rstmgr_vif.alert_dump_i = alert_dump;
   endfunction
 
-  local task check_alert_dump_info(alert_crashdump_t alert_dump);
+  local task check_alert_dump_info(linearized_alert_dump_t alert_dump);
     localparam int DumpWidth = $bits(alert_dump);
     localparam int WordWidth = 32;
-    logic [DumpWidth-1:0] linear_dump = {>>{alert_dump}};
     int                   i;
     `uvm_info(`gfn, "Checking alert_info", UVM_MEDIUM)
     for (i = 0; i + WordWidth <= DumpWidth; i += WordWidth) begin
       csr_wr(.ptr(ral.alert_info_ctrl.index), .value(i / WordWidth));
-      csr_rd_check(.ptr(ral.alert_info), .compare_value(linear_dump[i+:WordWidth]),
+      csr_rd_check(.ptr(ral.alert_info), .compare_value(alert_dump[i+:WordWidth]),
                    .err_msg($sformatf("checking alert_info bits %0d:%0d", i + 31, i)));
     end
     if (i < DumpWidth) begin
-      logic [(DumpWidth % 32) - 1:0] word = linear_dump >> i;
+      logic [(DumpWidth % 32) - 1:0] word = alert_dump >> i;
       csr_wr(.ptr(ral.alert_info_ctrl.index), .value(i / WordWidth));
       csr_rd_check(.ptr(ral.alert_info), .compare_value(word),
                    .err_msg($sformatf("checking alert_info bits %0d:%0d", DumpWidth - 1, i)));
     end
   endtask
 
-  virtual protected task set_alert_info_for_capture(alert_crashdump_t alert_dump, logic enable);
+  virtual protected task set_alert_info_for_capture(linearized_alert_dump_t alert_dump, logic enable);
     set_alert_dump_info(alert_dump);
     `uvm_info(`gfn, $sformatf("%0sabling alert_info capture", (enable ? "En" : "Dis")), UVM_MEDIUM)
     csr_wr(.ptr(ral.alert_info_ctrl.en), .value(enable));
@@ -235,13 +234,13 @@ class rstmgr_base_vseq extends cip_base_vseq #(
     csr_wr(.ptr(ral.cpu_info_ctrl.en), .value(enable));
   endtask
 
-  virtual protected task set_alert_and_cpu_info_for_capture(alert_crashdump_t alert_dump,
+  virtual protected task set_alert_and_cpu_info_for_capture(linearized_alert_dump_t alert_dump,
                                                             cpu_crash_dump_t cpu_dump);
     set_alert_info_for_capture(alert_dump, 1'b1);
     set_cpu_info_for_capture(cpu_dump, 1'b1);
   endtask
 
-  virtual protected task check_alert_info_after_reset(alert_crashdump_t alert_dump, logic enable);
+  virtual protected task check_alert_info_after_reset(linearized_alert_dump_t alert_dump, logic enable);
     csr_rd_check(.ptr(ral.alert_info_ctrl.en), .compare_value(enable),
                  .err_msg($sformatf("Expected alert info capture enable %b", enable)));
     csr_wr(.ptr(ral.alert_info_ctrl.en), .value(enable));
@@ -261,7 +260,7 @@ class rstmgr_base_vseq extends cip_base_vseq #(
   // field to overwrite the .en field. To make things simpler, after checking .en's expected
   // value we write it to update the mirrored value.
   virtual protected task check_alert_and_cpu_info_after_reset(
-      alert_crashdump_t alert_dump, cpu_crash_dump_t cpu_dump, logic enable);
+      linearized_alert_dump_t alert_dump, cpu_crash_dump_t cpu_dump, logic enable);
     check_alert_info_after_reset(alert_dump, enable);
     check_cpu_info_after_reset(cpu_dump, enable);
   endtask

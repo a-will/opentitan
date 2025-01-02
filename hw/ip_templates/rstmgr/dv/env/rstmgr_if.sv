@@ -4,7 +4,9 @@
 //
 // clkmgr interface.
 
-interface rstmgr_if (
+interface rstmgr_if #(
+  parameter int unsigned AlertCrashDumpWidth = 32
+) (
   input logic clk_aon,
   input logic clk,
   input logic rst_n
@@ -24,7 +26,7 @@ interface rstmgr_if (
   rstmgr_pkg::rstmgr_cpu_t                              cpu_i;
 
   // Interface to alert handler
-  alert_pkg::alert_crashdump_t                          alert_dump_i;
+  logic [AlertCrashDumpWidth-1:0]                       alert_dump_i;
 
   // Interface to cpu crash dump
   rv_core_ibex_pkg::cpu_crash_dump_t                    cpu_dump_i;
