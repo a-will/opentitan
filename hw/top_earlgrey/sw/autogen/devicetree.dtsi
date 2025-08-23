@@ -650,9 +650,8 @@
         };
         lc_ctrl: lc_ctrl@40140000 {
             compatible = "lowrisc,lc_ctrl";
-            reg = <0x40140000 0x00000100
-                   0x00000000 0x00001000>;
-            reg-names = "regs", "dmi";
+            reg = <0x40140000 0x00000100>;
+            reg-names = "regs";
         };
         alert_handler: alert_handler@40150000 {
             compatible = "lowrisc,alert_handler";

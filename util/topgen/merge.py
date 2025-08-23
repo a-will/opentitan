@@ -227,7 +227,7 @@ def elaborate_instance(instance, block: IpBlock):
         # block.
         inst_if_names = set(base_addrs.keys())
         block_if_names = set(block.reg_blocks.keys())
-        if block_if_names != inst_if_names:
+        if block_if_names < inst_if_names:
             log.error('Instance {!r} has a base_addrs field with keys {} '
                       'but the block it instantiates ({!r}) has device '
                       'interfaces {}.'.format(instance['name'], inst_if_names,

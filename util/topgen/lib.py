@@ -705,7 +705,7 @@ def is_inst(module: ConfigT) -> bool:
 
 
 def get_base_and_size(name_to_block: IpBlocksT, inst: ConfigT,
-                      ifname: Optional[str]) -> Tuple[int, int]:
+                      ifname: Optional[str]) -> Optional[Tuple[int, int]]:
 
     block = name_to_block.get(inst['type'])
     if block is None:
@@ -730,6 +730,9 @@ def get_base_and_size(name_to_block: IpBlocksT, inst: ConfigT,
                     inst['name'], block.name))
         else:
             bytes_used = 1 << rb.get_addr_width()
+
+        if ifname not in inst['base_addrs']:
+            return None
 
         base_addrs = deepcopy(inst['base_addrs'][ifname])
 
@@ -974,8 +977,12 @@ class TopGen:
                     full_if_name += Name.from_snake_case(if_name)
 
                 name = full_if_name
-                base, size = get_base_and_size(self._name_to_block, inst,
-                                               if_name)
+                base_and_size = get_base_and_size(self._name_to_block, inst,
+                                                  if_name)
+                if base_and_size == None:
+                    continue
+
+                base, size = base_and_size
                 if addr_space not in base:
                     continue
 
@@ -1016,8 +1023,12 @@ class TopGen:
                     full_if_name += Name.from_snake_case(if_name)
 
                 name = full_if_name
-                base, size = get_base_and_size(self._name_to_block, inst,
-                                               if_name)
+                base_and_size = get_base_and_size(self._name_to_block, inst,
+                                                  if_name)
+                if base_and_size == None:
+                    continue
+
+                base, size = base_and_size
                 if addr_space not in base:
                     continue
 
@@ -1045,8 +1056,12 @@ class TopGen:
         for inst in self.top['module']:
             if "memory" in inst:
                 for if_name, val in inst["memory"].items():
-                    base, size = get_base_and_size(self._name_to_block, inst,
-                                                   if_name)
+                    base_and_size = get_base_and_size(self._name_to_block, inst,
+                                                      if_name)
+                    if base_and_size == None:
+                        continue
+
+                    base, size = base_and_size
                     if addr_space not in base:
                         continue
 
