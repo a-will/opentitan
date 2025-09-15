@@ -20,44 +20,40 @@ module prim_rom import prim_rom_pkg::*; #(
 );
 
   logic unused_signals;
-  assign unused_signals = ^{cfg_i, rst_ni};
+  assign unused_signals = ^{rst_ni};
 
-  if (MemInitFile != "") begin : gen_generic
+  logic [Width-1:0] mem [Depth];
 
-    logic [Width-1:0] mem [Depth];
-
-    always_ff @(posedge clk_i) begin
-      if (req_i) begin
-        rdata_o <= mem[addr_i];
-      end
+  always_ff @(posedge clk_i) begin
+    if (req_i) begin
+      rdata_o <= mem[addr_i];
     end
-
-    `include "prim_util_memload.svh"
-  end else begin : gen_xpm
-    xpm_memory_sprom #(
-     .ADDR_WIDTH_A(Aw),
-     .AUTO_SLEEP_TIME(0),
-     .CASCADE_HEIGHT(0),
-     .MEMORY_OPTIMIZATION("false"),
-     .MEMORY_SIZE(Width * Depth),
-     .READ_DATA_WIDTH_A(Width),
-     .READ_LATENCY_A(1),
-     .USE_MEM_INIT_MMI(1)
-    ) xpm_memory_sprom_inst (
-     .clka(clk_i),
-     .rsta(1'b0),
-     .ena(req_i),
-     .addra(addr_i),
-     .douta(rdata_o),
-     .dbiterra(),
-     .sbiterra(),
-     .injectdbiterra(1'b0),
-     .injectsbiterra(1'b0),
-     .regcea(1'b1),
-     .sleep(1'b0)
-    );
   end
 
+  // Backdoor loading
+  logic clk_bkdr;
+  assign clk_bkdr = cfg_i.clk;
+
+  logic [Aw-1:0] addr_bkdr;
+  assign addr_bkdr = cfg_i.addr[Aw-1:0];
+
+  logic [Width-1:0] wdata_bkdr, rdata_bkdr;
+  assign wdata_bkdr = cfg_i.wdata[Width-1:0];
+  //assign cfg_rsp_o.rdata = {'0, rdata_bkdr};
+  logic unused_bkdr;
+  assign unused_bkdr = ^{rdata_bkdr};
+
+  always @(posedge clk_bkdr) begin
+    if (cfg_i.req) begin
+      if (cfg_i.write) begin
+        mem[addr_bkdr] <= wdata_bkdr;
+      end
+    end else begin
+      rdata_bkdr <= mem[addr_bkdr];
+    end
+  end
+
+  `include "prim_util_memload.svh"
 
   ////////////////
   // ASSERTIONS //
