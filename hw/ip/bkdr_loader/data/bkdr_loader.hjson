@@ -1,0 +1,155 @@
+// Copyright lowRISC contributors (OpenTitan project).
+// Licensed under the Apache License, Version 2.0, see LICENSE for details.
+// SPDX-License-Identifier: Apache-2.0
+{
+  name:               "bkdr_loader",
+  human_name:         "Memory Backdoor Loader",
+  one_line_desc:      "Provides indirect programming to RAMs",
+  one_paragraph_desc: '''
+  '''
+  // Unique comportable IP identifier defined under KNOWN_CIP_IDS in the regtool.
+  cip_id:             "0xffff",
+  design_spec:        "../doc",
+  dv_doc:             "",
+  hw_checklist:       "../doc/checklist",
+  sw_checklist:       "",
+  version:            "0.0.1",
+  life_stage:         "L0",
+  design_stage:       "D0",
+  verification_stage: "V0",
+  dif_stage:          "S0",
+  clocking: [
+    {clock: "clk_i", reset: "rst_ni", primary: true},
+  ]
+
+  bus_interfaces: [
+    { protocol: "tlul", direction: "device", name: "regs", racl_support: false }
+  ],
+
+  ////////////////
+  // Parameters //
+  ////////////////
+  param_list: [
+    { name:      "NumTargets",
+      desc:      "Number of RAM Targets",
+      type:      "int unsigned",
+      local:     "false",
+      expose:    "true",
+      default:   "8",
+    }
+    { name:      "MaxWordWidthDiv32",
+      desc:      "Max size of a word / 32",
+      type:      "int unsigned",
+      default:   "4",
+    }
+    { name:      "MaxIndexBitsDiv32",
+      desc:      "Max number of bits in the word index / word address, divided by 32",
+      type:      "int unsigned",
+      default:   "1",
+    }
+  ]
+
+  features: [
+  ]
+
+  /////////////////////////////
+  // Intermodule Connections //
+  /////////////////////////////
+
+  inter_signal_list: [
+  ]
+
+  /////////////////////
+  // Countermeasures //
+  /////////////////////
+
+  countermeasures: [
+  ]
+
+  regwidth: "32",
+  registers: {
+    regs: [
+      ////////////////////////
+      // Ctrl / Status CSRs //
+      ////////////////////////
+
+      { name: "INFO",
+        desc: "Information about this backdoor loader.",
+        swaccess: "ro",
+        hwaccess: "none",
+        hwqe:     "false",
+        fields: [
+          { bits: "2:0"
+            name: "MAX_WORD_SIZE"
+            desc: '''
+                  The maximum number of bits supported in a word, encoded as a power of 2.
+                  ''',
+            resval: "7" // Need templating to derive this value
+
+          }
+          { bits: "13:8"
+            name: "MAX_INDEX_BITS"
+            desc: '''
+                  The maximum number of bits supported in a word index (word "address").
+                  ''',
+            resval: "32"
+          }
+        ]
+      }
+      { name: "OP",
+        desc: "Operation control and status",
+        swaccess: "rw",
+        hwaccess: "hro",
+        fields: [
+          { bits: "0"
+            name: "ISSUE_WRITE"
+            swaccess: "rw1s",
+            hwaccess: "hrw",
+            desc: '''
+                  Issue a write transaction with the current state of the other CSRs.
+                  ''',
+          }
+          { bits: "15:8"
+            name: "MEM_SELECT"
+            desc: '''
+                  Binary-encoded memory selector for issuing an operation.
+                  ''',
+          }
+        ]
+      }
+      { skipto: "0x40" }
+      { multireg: {
+        name: "DATA",
+        desc: "Value to be written to the RAM",
+        count: "MaxWordWidthDiv32",
+        cname: "VAL",
+        swaccess: "rw",
+        hwaccess: "hro",
+        fields: [
+          { bits: "31:0",
+            name: "VAL",
+            desc: '''
+                  ''',
+            resval: 0x0
+          },
+        ]
+      } },
+      { multireg: {
+        name: "INDEX",
+        desc: "Index of the word to be written",
+        count: "MaxIndexBitsDiv32",
+        cname: "VAL",
+        swaccess: "rw",
+        hwaccess: "hro",
+        fields: [
+          { bits: "31:0",
+            name: "VAL",
+            desc: '''
+                  ''',
+            resval: 0x0
+          },
+        ]
+      } },
+    ],
+  }
+}
