@@ -102,8 +102,6 @@ module otp_macro
   assign test_vect = '0;
   assign test_o.status = '0;
 
-  logic unused_cfg;
-  assign unused_cfg = ^cfg_i;
   assign cfg_rsp_o  = '0;
 
   ///////////////////////////////////////
@@ -482,7 +480,7 @@ module otp_macro
     .rdata_o  ( rdata_ecc              ),
     .rvalid_o ( rvalid                 ),
     .rerror_o (                        ),
-    .cfg_i    ( '0                     ),
+    .cfg_i    ( cfg_i                  ),
     .cfg_rsp_o(                        ),
     .alert_o  (                        )
   );
