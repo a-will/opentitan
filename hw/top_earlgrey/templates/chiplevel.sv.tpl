@@ -1098,6 +1098,38 @@ module chip_${top["name"]}_${target["name"]} #(
 ## FPGA shared                                                   ##
 ###################################################################
 % if target["name"] in ["cw340", "cw310", "cw305"]:
+
+  tlul_jtag_dtm #(
+    .IdcodeValue(jtag_id_pkg::LC_DM_COMBINED_JTAG_IDCODE),
+    // Notes:
+    // - one RV_DM instance uses 9bits
+    // - our crossbar tooling expects individual IPs to be spaced apart by 12bits at the moment
+    // - the DMI address shifted through jtag is a word address and hence 2bits smaller than this
+    // - setting this to 18bits effectively gives us 2^6 = 64 addressable 12bit ranges
+    .NumDmiByteAbits(18)
+  ) u_tlul_jtag_dtm (
+    .clk_i      (clkmgr_aon_clocks.clk_main_infra),
+    .rst_ni     (rstmgr_aon_resets.rst_sys_n[rstmgr_pkg::Domain0Sel]),
+    .jtag_i     (jtag_req),
+    .jtag_o     (jtag_rsp),
+    .scan_rst_ni(scan_rst_n),
+    .scanmode_i (scanmode),
+    .tl_h2d_o   (dmi_h2d),
+    .tl_d2h_i   (dmi_d2h)
+  );
+
+  // Backdoor loader for FPGA
+  bkdr_loader #(
+    // Would like to do flash info pages as well, but the cfg port is hard-coded to GND.
+    .NumTargets(2)
+  ) u_bkdr_loader (
+    .clk_i(),
+    .rst_ni(),
+    .reqs_tl_i(),
+    .reqs_tl_o(),
+    .bkdr_req_o()
+  );
+
   //////////////////
   // PLL for FPGA //
   //////////////////
